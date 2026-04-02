@@ -6,6 +6,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const path = require('path');
+app.use(express.static(__dirname));
+
 // ── In-memory DB (replace with Airtable/Supabase in production) ──────────────
 const db = {
   patients: [
@@ -229,6 +232,10 @@ Rules:
     console.error('AI Error:', err);
     res.status(500).json({ error: 'AI service error', message: err.message });
   }
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.delete('/api/chat/:sessionId', (req, res) => {
