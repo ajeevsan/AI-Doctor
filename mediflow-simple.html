@@ -3,730 +3,1088 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
-<title>MediFlow</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<title>MediFlow – Clinic Automation</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --sky:#e8f4fd;--sky2:#d0e9fb;--sky3:#3b9ade;
-  --mint:#e6f9f0;--mint2:#a8eac8;--mint3:#22a366;
-  --peach:#fff0e8;--peach2:#ffd4b8;--peach3:#e87230;
-  --lav:#f0eefe;--lav2:#d4ccfa;--lav3:#6c5ce7;
-  --rose:#ffeef2;--rose2:#ffc4d0;--rose3:#d63864;
-  --sun:#fffbe6;--sun2:#ffe38a;--sun3:#c98a00;
-  --white:#ffffff;--offwhite:#f7f9fc;--light:#eef2f7;
-  --text:#1a2332;--t2:#4a5568;--t3:#8896a8;
-  --border:#dde4ed;--r:20px;--rs:14px;
-  --safe-b:env(safe-area-inset-bottom,0px);
+  --bg:#0b0f1a;--bg2:#111827;--bg3:#1a2235;--bg4:#202b3d;--bg5:#243047;
+  --accent:#3b82f6;--a2:#60a5fa;--green:#22c55e;--red:#ef4444;
+  --amber:#f59e0b;--purple:#8b5cf6;--teal:#14b8a6;
+  --text:#f1f5f9;--t2:#94a3b8;--t3:#64748b;
+  --border:#1e2d42;--b2:#2a3d5a;
+  --card:#131e30;--r:12px;--rs:8px;
+  --bottom-nav-h:64px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
 }
-body{background:var(--offwhite);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden}
-#app{min-height:100vh;display:flex;flex-direction:column}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;height:100vh;overflow:hidden}
+#root{height:100vh;display:flex}
 
-/* ── Top Header ── */
-.header{background:var(--white);border-bottom:1.5px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-mark{width:40px;height:40px;background:var(--sky3);border-radius:14px;display:grid;place-items:center;font-size:20px}
-.logo-name{font-size:20px;font-weight:800;color:var(--text)}
-.logo-name span{color:var(--sky3)}
-.header-date{font-size:13px;color:var(--t3);font-weight:600;display:none}
-@media(min-width:480px){.header-date{display:block}}
+/* ── Shell ── */
+.shell{display:flex;width:100%;height:100vh;overflow:hidden}
+.sidebar{width:230px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:width .25s}
+.sidebar.col{width:66px}
+.sb-logo{padding:20px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.logo-box{width:34px;height:34px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:9px;display:grid;place-items:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 2px 12px rgba(59,130,246,.35)}
+.logo-txt{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;letter-spacing:-.3px}
+.logo-txt span{color:var(--a2)}
+.sb-nav{flex:1;padding:10px 8px;display:flex;flex-direction:column;gap:3px}
+.nav-btn{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:var(--rs);border:none;background:none;color:var(--t2);cursor:pointer;width:100%;text-align:left;font-size:13.5px;white-space:nowrap;overflow:hidden;transition:all .15s;position:relative}
+.nav-btn:hover{background:var(--bg3);color:var(--text)}
+.nav-btn.act{background:rgba(59,130,246,.15);color:var(--a2)}
+.nav-btn.act::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:0 3px 3px 0}
+.nav-icon{font-size:16px;flex-shrink:0;width:22px;text-align:center}
+.sb-foot{padding:10px 8px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+.status-pill{display:flex;align-items:center;gap:8px;padding:9px 10px;background:var(--bg3);border-radius:var(--rs);border:1px solid var(--border)}
+.blink{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.4)}50%{opacity:.6;box-shadow:0 0 0 4px rgba(34,197,94,0)}}
 
-/* ── Page wrapper ── */
-.page{flex:1;padding:20px 16px calc(80px + var(--safe-b));max-width:680px;margin:0 auto;width:100%}
+/* ── Bottom Nav (Mobile) ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:calc(var(--bottom-nav-h) + var(--safe-bottom));background:var(--bg2);border-top:1px solid var(--border);z-index:100;padding-bottom:var(--safe-bottom)}
+.bottom-nav-inner{display:flex;height:var(--bottom-nav-h);align-items:stretch}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;color:var(--t3);cursor:pointer;padding:8px 4px;transition:color .15s;-webkit-tap-highlight-color:transparent;min-width:0}
+.bnav-btn.act{color:var(--a2)}
+.bnav-btn.act .bnav-icon-wrap{background:rgba(59,130,246,.15);border-radius:8px}
+.bnav-icon-wrap{padding:4px 12px;border-radius:8px;transition:.15s}
+.bnav-icon{font-size:20px;line-height:1}
+.bnav-label{font-size:10px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
-/* ── Section title ── */
-.sec-title{font-size:13px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;padding-left:4px}
+/* ── Main ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{padding:14px 16px;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:8px}
+.pg-title{font-size:18px;font-weight:600;letter-spacing:-.3px}
+.pg-sub{font-size:11px;color:var(--t3);margin-top:2px}
+.topbar-r{display:flex;gap:6px;align-items:center;flex-wrap:wrap;flex-shrink:0}
+.content{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
 
-/* ── Big stat cards ── */
-.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
-.stat-card{border-radius:var(--r);padding:18px 16px;cursor:pointer;transition:transform .12s;border:1.5px solid transparent;position:relative;overflow:hidden}
-.stat-card:active{transform:scale(.97)}
-.stat-card.sky{background:var(--sky);border-color:var(--sky2)}
-.stat-card.mint{background:var(--mint);border-color:var(--mint2)}
-.stat-card.peach{background:var(--peach);border-color:var(--peach2)}
-.stat-card.lav{background:var(--lav);border-color:var(--lav2)}
-.stat-icon{font-size:28px;margin-bottom:8px;line-height:1}
-.stat-num{font-size:32px;font-weight:800;line-height:1;margin-bottom:4px}
-.stat-card.sky .stat-num{color:var(--sky3)}
-.stat-card.mint .stat-num{color:var(--mint3)}
-.stat-card.peach .stat-num{color:var(--peach3)}
-.stat-card.lav .stat-num{color:var(--lav3)}
-.stat-label{font-size:13px;font-weight:700;color:var(--t2)}
+/* ── Buttons ── */
+.btn{padding:7px 15px;border-radius:var(--rs);border:none;cursor:pointer;font-size:13px;font-weight:500;transition:.15s;line-height:1}
+.btn-p{background:var(--accent);color:#fff}.btn-p:hover{background:#2563eb}
+.btn-g{background:var(--bg3);color:var(--t2);border:1px solid var(--border)}.btn-g:hover{background:var(--bg4);color:var(--text)}
+.btn-green{background:#15803d;color:#fff}.btn-green:hover{background:#166534}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 
-/* ── Big action buttons ── */
-.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
-.action-btn{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:20px 14px;cursor:pointer;text-align:center;transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:10px}
-.action-btn:active{transform:scale(.96);background:var(--light)}
-.action-btn:hover{border-color:var(--sky3);background:var(--sky)}
-.action-icon{font-size:36px;line-height:1}
-.action-label{font-size:14px;font-weight:700;color:var(--text);line-height:1.3}
-.action-sub{font-size:11px;color:var(--t3);font-weight:600}
+/* ── Metrics ── */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.metric::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.c-blue::after{background:linear-gradient(90deg,var(--accent),transparent)}
+.c-green::after{background:linear-gradient(90deg,var(--green),transparent)}
+.c-amber::after{background:linear-gradient(90deg,var(--amber),transparent)}
+.c-purple::after{background:linear-gradient(90deg,var(--purple),transparent)}
+.mlabel{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.mval{font-size:24px;font-weight:700;line-height:1}
+.msub{font-size:10px;color:var(--t3);margin-top:4px}
+.c-blue .mval{color:var(--a2)}.c-green .mval{color:var(--green)}.c-amber .mval{color:var(--amber)}.c-purple .mval{color:var(--purple)}
 
-/* ── Patient list ── */
-.patient-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .12s;margin-bottom:10px}
-.patient-card:active{transform:scale(.98)}
-.patient-card:hover{border-color:var(--sky3);background:var(--sky)}
-.avatar{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0}
-.patient-info{flex:1;min-width:0}
-.patient-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:3px}
-.patient-meta{font-size:12px;color:var(--t3);font-weight:600}
-.patient-badge{background:var(--light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--t2);flex-shrink:0}
-.patient-badge.allergy{background:var(--peach);color:var(--peach3)}
+/* ── Cards ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-/* ── Appointment cards ── */
-.appt-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;cursor:pointer;transition:all .12s}
-.appt-card:active{transform:scale(.98)}
-.appt-card.upcoming{border-left:5px solid var(--sky3);border-radius:0 var(--r) var(--r) 0}
-.appt-card.completed{border-left:5px solid var(--mint3);border-radius:0 var(--r) var(--r) 0}
-.appt-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.appt-name{font-size:16px;font-weight:700}
-.appt-chip{border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700}
-.appt-chip.upcoming{background:var(--sky);color:var(--sky3);border:1.5px solid var(--sky2)}
-.appt-chip.completed{background:var(--mint);color:var(--mint3);border:1.5px solid var(--mint2)}
-.appt-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);font-weight:600;margin-bottom:4px}
-.appt-row:last-child{margin-bottom:0}
-.appt-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+/* ── Tables ── */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;color:var(--t3);font-weight:500;border-bottom:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--t2)}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:rgba(255,255,255,.02)}
 
-/* ── Filter tabs ── */
-.filter-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
-.filter-tabs::-webkit-scrollbar{display:none}
-.ftab{padding:8px 18px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);color:var(--t2);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.12s;font-family:'Nunito',sans-serif}
-.ftab.act{background:var(--sky3);border-color:var(--sky3);color:#fff}
+/* ── Badges ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.b-blue{background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}
+.b-green{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2)}
+.b-amber{background:rgba(245,158,11,.12);color:#fcd34d;border:1px solid rgba(245,158,11,.2)}
+.b-red{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.2)}
+.b-purple{background:rgba(139,92,246,.12);color:#a78bfa;border:1px solid rgba(139,92,246,.2)}
+.b-teal{background:rgba(20,184,166,.12);color:#2dd4bf;border:1px solid rgba(20,184,166,.2)}
 
-/* ── Booking form ── */
-.form-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.form-title{font-size:18px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.form-title-icon{font-size:24px}
-.field-label{font-size:13px;font-weight:700;color:var(--t2);margin-bottom:6px;display:block}
-.field-input{width:100%;background:var(--offwhite);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;color:var(--text);font-size:15px;font-weight:600;outline:none;font-family:'Nunito',sans-serif;transition:border .15s;margin-bottom:14px}
-.field-input:focus{border-color:var(--sky3);background:#fff}
-.field-input::placeholder{color:var(--t3);font-weight:600}
-textarea.field-input{resize:none;min-height:80px;line-height:1.5}
-.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-.time-chip{padding:10px 6px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:700;color:var(--t2);cursor:pointer;text-align:center;transition:.12s;font-family:'Nunito',sans-serif}
-.time-chip:active{transform:scale(.95)}
-.time-chip.sel{background:var(--sky3);border-color:var(--sky3);color:#fff}
-.submit-btn{width:100%;padding:16px;border-radius:var(--rs);border:none;background:var(--sky3);color:#fff;font-size:16px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:8px}
-.submit-btn:active{transform:scale(.98);background:#2d87cc}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed}
-.cancel-btn{width:100%;padding:13px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);color:var(--t2);font-size:15px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:8px}
+/* ── Forms ── */
+.fg{margin-bottom:14px}
+.flabel{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center}
+.finput{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:9px 12px;color:var(--text);font-size:14px;outline:none;transition:border .15s}
+.finput:focus{border-color:var(--accent)}
+textarea.finput{resize:vertical;min-height:80px;line-height:1.5}
 
-/* ── Success banner ── */
-.success-banner{background:var(--mint);border:1.5px solid var(--mint2);border-radius:var(--r);padding:18px 16px;display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
-.success-icon{font-size:32px;flex-shrink:0}
-.success-text .bold{font-size:16px;font-weight:800;color:var(--mint3);margin-bottom:4px}
-.success-text .sub{font-size:13px;color:#2d7a50;font-weight:600}
-
-/* ── Detail view ── */
-.detail-header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
-.detail-avatar{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:800;color:#fff;flex-shrink:0}
-.detail-name{font-size:22px;font-weight:800}
-.detail-sub{font-size:13px;color:var(--t3);font-weight:600;margin-top:2px}
-.info-block{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
-.info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1.5px solid var(--light)}
-.info-row:last-child{border-bottom:none;padding-bottom:0}
-.info-row:first-child{padding-top:0}
-.info-key{font-size:13px;color:var(--t3);font-weight:600}
-.info-val{font-size:14px;font-weight:700;color:var(--text)}
-.back-btn{display:flex;align-items:center;gap:6px;padding:10px 16px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;margin-bottom:20px;width:fit-content}
-
-/* ── Prescription pills ── */
-.rx-item{background:var(--lav);border:1.5px solid var(--lav2);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px}
-.rx-name{font-size:15px;font-weight:800;color:var(--lav3);margin-bottom:3px}
-.rx-detail{font-size:12px;color:#5a4a9e;font-weight:600}
-
-/* ── Follow-up cards ── */
-.fu-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
-.fu-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-.fu-name{font-size:15px;font-weight:800}
-.fu-date{font-size:12px;color:var(--t3);font-weight:600;margin-top:2px}
-.fu-status{border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700}
-.fu-status.ok{background:var(--mint);color:var(--mint3);border:1.5px solid var(--mint2)}
-.fu-status.warn{background:var(--sun);color:var(--sun3);border:1.5px solid var(--sun2)}
-.fu-note{font-size:13px;color:var(--t2);font-weight:600;background:var(--offwhite);border-radius:10px;padding:10px 12px}
-.sim-btn{width:100%;padding:12px;border-radius:var(--rs);border:1.5px solid var(--sky2);background:var(--sky);color:var(--sky3);font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:10px;transition:.12s}
-.sim-btn:active{transform:scale(.98)}
-.sim-btn:disabled{opacity:.5;cursor:not-allowed}
-
-/* ── WhatsApp bubbles ── */
-.wa-wrap{background:#e8f5e9;border-radius:var(--rs);padding:12px;margin-top:10px}
-.wa-header{font-size:11px;font-weight:700;color:#4caf50;text-align:center;margin-bottom:10px;letter-spacing:.5px}
-.wa-msg{display:flex;margin-bottom:8px}
-.wa-msg.r{justify-content:flex-end}
-.wa-bubble{border-radius:12px;padding:10px 14px;max-width:80%;font-size:13px;font-weight:600;line-height:1.5;white-space:pre-wrap}
-.wa-clinic{background:#fff;color:#1a2332;border-radius:4px 12px 12px 12px}
-.wa-patient{background:#dcf8c6;color:#1a2332;border-radius:12px 4px 12px 12px}
-.wa-time{font-size:10px;color:var(--t3);margin-top:3px;font-weight:600}
-
-/* ── Empty state ── */
-.empty{text-align:center;padding:40px 20px;color:var(--t3)}
-.empty-icon{font-size:48px;margin-bottom:12px}
-.empty-text{font-size:15px;font-weight:700}
-
-/* ── Search bar ── */
-.search-bar{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px 12px 40px;color:var(--text);font-size:15px;font-weight:600;outline:none;font-family:'Nunito',sans-serif;margin-bottom:16px;transition:border .15s;position:relative}
-.search-bar:focus{border-color:var(--sky3)}
-.search-wrap{position:relative}
-.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:17px;pointer-events:none}
-
-/* ── Bottom nav ── */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1.5px solid var(--border);z-index:100;padding-bottom:var(--safe-b)}
-.bnav-inner{display:flex;height:64px}
-.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;padding:8px 4px;transition:all .12s;font-family:'Nunito',sans-serif;position:relative}
-.bnav-btn.act .bnav-icon{transform:scale(1.15)}
-.bnav-dot{position:absolute;top:8px;right:calc(50% - 18px);width:7px;height:7px;background:var(--rose3);border-radius:50%;border:2px solid var(--white)}
-.bnav-icon{font-size:22px;line-height:1;transition:transform .12s}
-.bnav-label{font-size:11px;font-weight:700;color:var(--t3)}
-.bnav-btn.act .bnav-label{color:var(--sky3)}
-
-/* ── Modal overlay ── */
-.modal-wrap{position:fixed;inset:0;background:rgba(20,30,50,.5);display:flex;align-items:flex-end;justify-content:center;z-index:200}
-.modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto}
+/* ── Modal ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:flex-end;justify-content:center;z-index:300;backdrop-filter:blur(2px)}
+.modal{background:var(--bg2);border:1px solid var(--b2);border-radius:var(--r) var(--r) 0 0;padding:20px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;box-shadow:0 -8px 40px rgba(0,0,0,.5)}
+.modal-hdr{font-size:17px;font-weight:600;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+/* Desktop modal */
 @media(min-width:640px){
-  .modal-wrap{align-items:center}
-  .modal-sheet{border-radius:24px;max-height:88vh}
+  .overlay{align-items:center}
+  .modal{border-radius:var(--r);max-height:88vh;width:580px}
 }
-.modal-handle{width:40px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 16px}
-.modal-title{font-size:20px;font-weight:800;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
-.modal-close{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--light);cursor:pointer;font-size:16px;display:grid;place-items:center;flex-shrink:0}
 
-/* ── Utility ── */
-.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}
-.chip.sky{background:var(--sky);color:var(--sky3);border:1.5px solid var(--sky2)}
-.chip.mint{background:var(--mint);color:var(--mint3);border:1.5px solid var(--mint2)}
-.chip.peach{background:var(--peach);color:var(--peach3);border:1.5px solid var(--peach2)}
-.mb8{margin-bottom:8px}.mb16{margin-bottom:16px}.mb20{margin-bottom:20px}
+/* ── Avatar ── */
+.av{border-radius:50%;display:grid;place-items:center;font-weight:700;flex-shrink:0}
+
+/* ── Tags ── */
+.tag{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:11px;background:var(--bg4);color:var(--t3);border:1px solid var(--border)}
+
+/* ── Bar Chart ── */
+.bar-chart{display:flex;align-items:flex-end;gap:5px;height:120px;padding:0 2px}
+.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px}
+.bar{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--a2),var(--accent));min-width:16px;position:relative;cursor:default}
+.bar:hover{opacity:.85}
+.bar-lbl{font-size:9px;color:var(--t3)}
+.bar-v{font-size:9px;color:var(--t2)}
+
+/* ────────────────────────────────────────────
+   CHAT STYLES
+──────────────────────────────────────────── */
+.chat-page{display:flex;height:calc(100vh - 65px);overflow:hidden}
+.chat-panel{flex:1;display:flex;flex-direction:column;min-width:0;border-right:1px solid var(--border)}
+.chat-hdr{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.chat-hdr-l{display:flex;align-items:center;gap:10px}
+.ai-ring{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:grid;place-items:center;font-size:18px;flex-shrink:0;position:relative}
+.ai-ring::after{content:'';position:absolute;bottom:1px;right:1px;width:9px;height:9px;background:var(--green);border-radius:50%;border:2px solid var(--bg2)}
+.chat-name{font-weight:600;font-size:14px}
+.chat-status{font-size:11px;color:var(--t3);margin-top:1px}
+.mode-tabs{display:flex;gap:5px}
+.mode-tab{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--t2);font-size:12px;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent}
+.mode-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.msgs-area{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--bg);-webkit-overflow-scrolling:touch}
+.msg-row{display:flex;gap:8px;max-width:90%}
+.msg-row.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:13px;flex-shrink:0;align-self:flex-end}
+.msg-av.ai{background:linear-gradient(135deg,var(--accent),var(--purple))}
+.msg-av.user{background:var(--bg4);border:1px solid var(--b2)}
+.msg-body{display:flex;flex-direction:column;gap:4px}
+.msg-row.user .msg-body{align-items:flex-end}
+.bubble{padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.6;word-break:break-word}
+.bubble.ai{background:var(--bg3);color:var(--text);border-radius:4px 16px 16px 16px;border:1px solid var(--border)}
+.bubble.user{background:linear-gradient(135deg,var(--accent),#2563eb);color:#fff;border-radius:16px 4px 16px 16px}
+.msg-time{font-size:10px;color:var(--t3)}
+.rich-card{background:var(--bg4);border:1px solid var(--b2);border-radius:var(--rs);padding:12px 14px;margin-top:8px;font-size:13px}
+.rich-card-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:8px;font-weight:500}
+.rich-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
+.rich-row:last-child{border-bottom:none}
+.rich-label{color:var(--t2)}
+.rich-val{color:var(--text);font-weight:500}
+.patient-card-mini{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.patient-card-mini:last-child{border-bottom:none}
+.appt-card{background:var(--bg5);border-radius:var(--rs);padding:10px 12px;margin-bottom:6px;border-left:3px solid var(--accent)}
+.appt-card.comp{border-left-color:var(--green)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.stat-box{background:var(--bg5);border-radius:6px;padding:8px 10px;text-align:center}
+.stat-n{font-size:20px;font-weight:700}
+.stat-l{font-size:10px;color:var(--t3);text-transform:uppercase;margin-top:2px}
+.typing-row{display:flex;gap:10px;align-items:center}
+.typing-bubble{background:var(--bg3);border:1px solid var(--border);border-radius:4px 16px 16px 16px;padding:12px 16px;display:flex;gap:5px}
+.tdot{width:7px;height:7px;background:var(--t3);border-radius:50%;animation:td .7s ease infinite}
+.tdot:nth-child(2){animation-delay:.15s}.tdot:nth-child(3){animation-delay:.3s}
+@keyframes td{0%,60%,100%{transform:translateY(0);opacity:.6}30%{transform:translateY(-5px);opacity:1}}
+.chat-input-bar{padding:12px 14px;border-top:1px solid var(--border);background:var(--bg2);display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
+.chat-textarea{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;color:var(--text);font-size:14px;outline:none;resize:none;max-height:100px;line-height:1.5;transition:border .15s;font-family:inherit}
+.chat-textarea:focus{border-color:var(--accent)}
+.send-btn{width:40px;height:40px;border-radius:var(--rs);background:var(--accent);border:none;cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:.15s;-webkit-tap-highlight-color:transparent}
+.send-btn:hover{background:#2563eb}
+.send-btn:disabled{opacity:.4;cursor:not-allowed}
+.send-icon{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ctx-panel{width:260px;background:var(--bg2);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
+.ctx-section{padding:14px;border-bottom:1px solid var(--border)}
+.ctx-title{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin-bottom:8px;font-weight:500}
+.quick-btn{display:block;width:100%;text-align:left;padding:7px 10px;border-radius:var(--rs);border:1px solid var(--border);background:var(--bg3);color:var(--t2);font-size:12px;cursor:pointer;margin-bottom:4px;transition:.15s;line-height:1.4;-webkit-tap-highlight-color:transparent}
+.quick-btn:hover{background:var(--bg4);color:var(--text);border-color:var(--b2)}
+.booked-box{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:var(--rs);padding:10px}
+.booked-title{color:var(--green);font-weight:600;font-size:13px;margin-bottom:8px}
+.booked-row{display:flex;gap:6px;align-items:flex-start;font-size:12px;color:var(--t2);margin-bottom:4px}
+
+/* ── WA sim ── */
+.wa-wrap{background:#060d1a;border-radius:var(--rs);padding:10px;max-height:200px;overflow-y:auto;margin-top:8px;border:1px solid #0d1f30}
+.wa-msg{display:flex;margin-bottom:7px}
+.wa-msg.r{justify-content:flex-end}
+.wa-b{border-radius:8px;padding:8px 11px;max-width:84%;font-size:12px;line-height:1.5;white-space:pre-wrap}
+.wa-cli{background:#1a3a2a;border:1px solid #2a5a3a;color:#86efac}
+.wa-pat{background:#1a2a4a;border:1px solid #1e3a6e;color:#93c5fd}
+.wa-t{font-size:9px;color:var(--t3);text-align:right;margin-top:3px}
+
+/* ── Misc ── */
+.section-t{font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text)}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.empty{text-align:center;padding:32px;color:var(--t3);font-size:14px}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE — Tablet (≤900px): Collapse sidebar
+══════════════════════════════════════════════ */
+@media(max-width:900px){
+  .sidebar{width:60px}
+  .sidebar .logo-txt,.sidebar .sb-foot .status-pill span,
+  .sidebar .nav-btn span:not(.nav-icon),.sidebar .sb-foot button{display:none}
+  .ctx-panel{display:none}
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE — Mobile (≤640px): Hide sidebar, show bottom nav
+══════════════════════════════════════════════ */
+@media(max-width:640px){
+  .sidebar{display:none}
+  .bottom-nav{display:flex;flex-direction:column}
+  .main{height:calc(100vh - var(--bottom-nav-h) - var(--safe-bottom))}
+  .content{padding:12px}
+  .topbar{padding:12px}
+  .pg-title{font-size:16px}
+
+  /* Metrics: 2-column on mobile */
+  .metrics{grid-template-columns:1fr 1fr;gap:8px}
+  .mval{font-size:20px}
+
+  /* Grid 2: stack on mobile */
+  .grid2{grid-template-columns:1fr}
+
+  /* Hide some table columns on mobile */
+  .hide-mobile{display:none}
+
+  /* Chat: fill full width, no right panel */
+  .chat-page{height:calc(100vh - 65px - var(--bottom-nav-h) - var(--safe-bottom))}
+  .chat-panel{border-right:none}
+  .msg-row{max-width:95%}
+  .mode-tab{padding:5px 10px;font-size:11px}
+
+  /* Patient grid: single column */
+  .pat-grid{grid-template-columns:1fr!important}
+
+  /* Follow-up grid: single col */
+  .fu-grid{grid-template-columns:1fr!important}
+
+  /* Modal: full-width sheet */
+  .modal{padding:16px}
+  .modal .grid-rx{grid-template-columns:1fr 1fr!important}
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE — Small mobile (≤380px)
+══════════════════════════════════════════════ */
+@media(max-width:380px){
+  .metrics{grid-template-columns:1fr 1fr}
+  .mval{font-size:18px}
+  .bnav-label{display:none}
+  .bnav-icon{font-size:22px}
+}
 </style>
 </head>
 <body>
-<div id="app">
-  <div class="header">
-    <div class="logo">
-      <div class="logo-mark">🏥</div>
-      <div class="logo-name"><span>Medi</span>Flow</div>
-    </div>
-    <div class="header-date" id="hdr-date"></div>
-  </div>
-  <div class="page" id="page"></div>
-  <nav class="bottom-nav">
-    <div class="bnav-inner" id="bnav"></div>
-  </nav>
-</div>
+<div id="root"><div style="display:grid;place-items:center;height:100vh;color:#64748b;font-size:14px;gap:8px">
+  <div style="font-size:24px">⚕</div>
+  <div>Loading MediFlow…</div>
+</div></div>
 
 <script>
 const S = {
-  tab: 'home',
-  patients: [
-    {id:'p1',name:'Priya Sharma',phone:'98201 11111',dob:'1990-03-15',blood:'O+',allergies:'Penicillin',gender:'Female'},
-    {id:'p2',name:'Arjun Mehta',phone:'98202 22222',dob:'1985-07-22',blood:'A+',allergies:'None',gender:'Male'},
-    {id:'p3',name:'Sunita Patel',phone:'98203 33333',dob:'1972-11-08',blood:'B+',allergies:'Sulfa drugs',gender:'Female'},
-    {id:'p4',name:'Rahul Desai',phone:'98204 44444',dob:'1998-01-30',blood:'AB-',allergies:'None',gender:'Male'},
-    {id:'p5',name:'Meera Joshi',phone:'98205 55555',dob:'1965-05-12',blood:'A-',allergies:'Aspirin',gender:'Female'},
+  page:'dashboard',
+  collapsed:false,
+  patients:[
+    {id:'p1',name:'Priya Sharma',phone:'+91 98201 11111',dob:'1990-03-15',blood:'O+',allergies:'Penicillin',gender:'Female'},
+    {id:'p2',name:'Arjun Mehta',phone:'+91 98202 22222',dob:'1985-07-22',blood:'A+',allergies:'None',gender:'Male'},
+    {id:'p3',name:'Sunita Patel',phone:'+91 98203 33333',dob:'1972-11-08',blood:'B+',allergies:'Sulfa drugs',gender:'Female'},
+    {id:'p4',name:'Rahul Desai',phone:'+91 98204 44444',dob:'1998-01-30',blood:'AB-',allergies:'None',gender:'Male'},
+    {id:'p5',name:'Meera Joshi',phone:'+91 98205 55555',dob:'1965-05-12',blood:'A-',allergies:'Aspirin',gender:'Female'},
   ],
-  appointments: [
+  appointments:[
     {id:'a1',pid:'p1',pname:'Priya Sharma',date:'2026-04-05',time:'10:00',symptoms:'Fever, persistent headache since 3 days',status:'upcoming',notes:'',rx:[]},
-    {id:'a2',pid:'p2',pname:'Arjun Mehta',date:'2026-04-02',time:'11:30',symptoms:'Lower back pain, difficulty standing',status:'completed',notes:'Muscle strain. Rest for 3 days.',rx:[{name:'Ibuprofen 400mg',dose:'Twice daily after meals',days:5},{name:'Meftal Spas',dose:'Once at night',days:3}]},
-    {id:'a3',pid:'p3',pname:'Sunita Patel',date:'2026-04-01',time:'09:00',symptoms:'Diabetes type-2 follow-up, blurred vision',status:'completed',notes:'HbA1c stable. BP slightly high.',rx:[{name:'Metformin 500mg',dose:'Once daily with dinner',days:30},{name:'Amlodipine 5mg',dose:'Once daily morning',days:30}]},
-    {id:'a4',pid:'p4',pname:'Rahul Desai',date:'2026-04-07',time:'14:00',symptoms:'Persistent cough, mild fever, sore throat',status:'upcoming',notes:'',rx:[]},
+    {id:'a2',pid:'p2',pname:'Arjun Mehta',date:'2026-04-02',time:'11:30',symptoms:'Lower back pain, difficulty standing',status:'completed',notes:'Muscle strain due to posture. Rest advised for 3 days.',rx:[{name:'Ibuprofen 400mg',dose:'Twice daily after meals',days:5},{name:'Meftal Spas',dose:'Once at night',days:3}]},
+    {id:'a3',pid:'p3',pname:'Sunita Patel',date:'2026-04-01',time:'09:00',symptoms:'Diabetes type-2 follow-up, blurred vision',status:'completed',notes:'HbA1c stable at 6.8. BP slightly elevated at 140/90.',rx:[{name:'Metformin 500mg',dose:'Once daily with dinner',days:30},{name:'Amlodipine 5mg',dose:'Once daily morning',days:30}]},
+    {id:'a4',pid:'p4',pname:'Rahul Desai',date:'2026-04-07',time:'14:00',symptoms:'Persistent cough, mild fever (99.8°F), sore throat',status:'upcoming',notes:'',rx:[]},
     {id:'a5',pid:'p5',pname:'Meera Joshi',date:'2026-04-03',time:'16:00',symptoms:'Knee pain, swelling in left knee',status:'upcoming',notes:'',rx:[]},
-    {id:'a6',pid:'p1',pname:'Priya Sharma',date:'2026-03-15',time:'10:30',symptoms:'Seasonal allergies, runny nose',status:'completed',notes:'Allergic rhinitis confirmed.',rx:[{name:'Cetirizine 10mg',dose:'Once daily at bedtime',days:10}]},
+    {id:'a6',pid:'p1',pname:'Priya Sharma',date:'2026-03-15',time:'10:30',symptoms:'Seasonal allergies, runny nose',status:'completed',notes:'Allergic rhinitis confirmed. Avoid dust exposure.',rx:[{name:'Cetirizine 10mg',dose:'Once daily at bedtime',days:10}]},
   ],
-  followUps: [
-    {id:'f1',pid:'p2',pname:'Arjun Mehta',aid:'a2',sent:'2026-04-02T18:00:00',resp:'yes',note:'Feeling much better, back pain reduced'},
-    {id:'f2',pid:'p3',pname:'Sunita Patel',aid:'a3',sent:'2026-04-01T18:00:00',resp:'no',note:'Vision still blurry, needs rebooking'},
-    {id:'f3',pid:'p1',pname:'Priya Sharma',aid:'a6',sent:'2026-03-15T19:00:00',resp:'yes',note:'Allergy resolved after 3 days'},
+  followUps:[
+    {id:'f1',pid:'p2',pname:'Arjun Mehta',aid:'a2',sent:'2026-04-02T18:00:00',resp:'yes',adhere:true,note:'Patient feeling better, back pain reduced'},
+    {id:'f2',pid:'p3',pname:'Sunita Patel',aid:'a3',sent:'2026-04-01T18:00:00',resp:'no',adhere:false,note:'Vision still blurry, rebooked for April 8'},
+    {id:'f3',pid:'p1',pname:'Priya Sharma',aid:'a6',sent:'2026-03-15T19:00:00',resp:'yes',adhere:true,note:'Allergy symptoms resolved after 3 days'},
   ],
-  apptFilter: 'all',
-  patSearch: '',
-  selPatId: null,
-  selApptId: null,
-  bookStep: 0,
-  bookData: {},
-  bookSuccess: false,
-  waMessages: {},
-  simRunning: null,
-  modalApptId: null,
-  modalRx: [],
-  modalNotes: '',
+  chatMode:'booking',
+  chatHistory:[],
+  chatBusy:false,
+  booked:null,
+  _collect:{},
+  apptFilter:'all',
+  patSearch:'',
+  selPat:null,
+  modalAppt:null,
+  modalRx:[],
+  modalNotes:'',
+  waMessages:{},
+  simulating:null,
 };
 
-const AV_COLORS = ['#3b9ade','#6c5ce7','#e87230','#22a366','#d63864','#c98a00','#0984e3'];
-function avColor(name){let h=0;for(let c of(name||''))h=(h*31+c.charCodeAt(0))%AV_COLORS.length;return AV_COLORS[h]}
-function initials(n){return(n||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?'}
-function fmtDate(d){if(!d)return'—';try{return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}catch{return d}}
-function fmtTime(t){if(!t)return'';const[h,m]=t.split(':');const hr=parseInt(h);return`${hr>12?hr-12:hr||12}:${m} ${hr>=12?'PM':'AM'}`}
-function uid(){return'x'+Date.now()+Math.random().toString(36).slice(2,5)}
+const COLORS=['#3b82f6','#8b5cf6','#ec4899','#22c55e','#f59e0b','#06b6d4','#f97316'];
+function avc(n){let h=0;for(let c of(n||''))h=(h*31+c.charCodeAt(0))%COLORS.length;return COLORS[h]}
+function ini(n){return(n||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?'}
+function fd(d){if(!d)return'—';try{return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}catch{return d}}
+function ft(t){if(!t)return'';const[h,m]=t.split(':');const hr=parseInt(h);return`${hr>12?hr-12:hr||12}:${m} ${hr>=12?'PM':'AM'}`}
+function uid(){return 'x'+Date.now()+Math.random().toString(36).slice(2,5)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function now(){return new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}
+function isMobile(){return window.innerWidth<=640}
 
-function setTab(t){S.tab=t;S.selPatId=null;S.selApptId=null;S.bookStep=0;S.bookData={};S.bookSuccess=false;render()}
+const INTENTS = {
+  SHOW_PATIENTS:      /\b(patients?|all patients?|list patients?|show patients?|patient list)\b/i,
+  SHOW_APPOINTMENTS:  /\b(appointments?|all appointments?|show appointments?|schedule|calendar)\b/i,
+  UPCOMING:           /\b(upcoming|today|tomorrow|next|scheduled)\b.*\b(appointments?|patients?|visits?)\b|\bwho.*coming\b|\bwho.*today\b/i,
+  COMPLETED:          /\b(completed?|done|finished|past|previous)\b.*\b(appointments?|visits?)\b/i,
+  FOLLOWUP_STATUS:    /\b(follow.?up|followup|whatsapp|pending|sent)\b/i,
+  ANALYTICS:          /\b(stats?|analytics?|report|summary|overview|numbers?|metrics?|performance)\b/i,
+  PATIENT_LOOKUP:     /\b(tell me about|show me|lookup|find|search|who is|patient named?|info (on|about))\b/i,
+  REBOOK:             /\b(rebook|re.book|rebooking|needs? rebooking)\b/i,
+  MEDICINE:           /\b(medicine|medication|prescription|rx|drug|dose)\b/i,
+  GREETING:           /^(hi|hello|hey|good morning|good afternoon|namaste|hii+|howdy)[\s!?.]*$/i,
+  HELP:               /\b(help|what can you do|commands?|options?)\b/i,
+};
 
-/* ── Nav ── */
-function renderNav(){
-  const tabs=[{id:'home',icon:'🏠',label:'Home'},{id:'appointments',icon:'📅',label:'Visits'},{id:'patients',icon:'👥',label:'Patients'},{id:'book',icon:'➕',label:'Book'},{id:'followup',icon:'💬',label:'Check-up'}];
-  const upcomingCount=S.appointments.filter(a=>a.status==='upcoming').length;
-  document.getElementById('bnav').innerHTML=tabs.map(t=>`
-    <button class="bnav-btn ${S.tab===t.id?'act':''}" onclick="setTab('${t.id}')">
-      ${t.id==='appointments'&&upcomingCount?`<div class="bnav-dot"></div>`:''}
-      <div class="bnav-icon">${t.icon}</div>
-      <div class="bnav-label">${t.label}</div>
-    </button>`).join('');
+function detectIntent(msg) {
+  for (const [intent, regex] of Object.entries(INTENTS)) {
+    if (regex.test(msg)) return intent;
+  }
+  for (const p of S.patients) {
+    const parts = p.name.toLowerCase().split(' ');
+    if (parts.some(part => msg.toLowerCase().includes(part))) return 'NAMED_PATIENT';
+  }
+  return 'UNKNOWN';
 }
 
-/* ── Pages ── */
-function pageHome(){
-  const upcoming=S.appointments.filter(a=>a.status==='upcoming').length;
-  const completed=S.appointments.filter(a=>a.status==='completed').length;
-  const patients=S.patients.length;
-  const fuSent=S.followUps.length;
-  const nextAppt=[...S.appointments].filter(a=>a.status==='upcoming').sort((a,b)=>new Date(a.date)-new Date(b.date))[0];
-  return`
-    <div class="sec-title">Overview</div>
-    <div class="stat-row mb20">
-      <div class="stat-card sky" onclick="S.apptFilter='upcoming';setTab('appointments')">
-        <div class="stat-icon">📅</div>
-        <div class="stat-num">${upcoming}</div>
-        <div class="stat-label">Upcoming Visits</div>
-      </div>
-      <div class="stat-card mint" onclick="S.apptFilter='completed';setTab('appointments')">
-        <div class="stat-icon">✅</div>
-        <div class="stat-num">${completed}</div>
-        <div class="stat-label">Completed</div>
-      </div>
-      <div class="stat-card peach" onclick="setTab('patients')">
-        <div class="stat-icon">👥</div>
-        <div class="stat-num">${patients}</div>
-        <div class="stat-label">Patients</div>
-      </div>
-      <div class="stat-card lav" onclick="setTab('followup')">
-        <div class="stat-icon">💬</div>
-        <div class="stat-num">${fuSent}</div>
-        <div class="stat-label">Follow-ups</div>
+function findPatientByMsg(msg) {
+  const lower = msg.toLowerCase();
+  return S.patients.find(p =>
+    p.name.toLowerCase().split(' ').some(w => w.length > 2 && lower.includes(w))
+  );
+}
+
+function generateDoctorResponse(msg) {
+  const intent = detectIntent(msg);
+  switch (intent) {
+    case 'GREETING':
+      return { text: `Hello Doctor! 👋 I'm MedAssist, your AI assistant.\n\nI have access to ${S.patients.length} patients, ${S.appointments.length} appointments, and ${S.followUps.length} follow-up records.\n\nWhat would you like to know?`, rich: null };
+    case 'HELP':
+      return { text: `Here's what I can help you with:`, rich: {type:'help',items:['📋 "Show all patients"','📅 "Upcoming appointments"','✅ "Completed appointments"','👤 "Tell me about Arjun Mehta"','💊 "Prescriptions for Priya"','📊 "Show analytics"','📱 "Follow-up status"','🔄 "Who needs rebooking?"']}};
+    case 'SHOW_PATIENTS':
+      return { text: `All ${S.patients.length} registered patients:`, rich: {type:'patients', data:S.patients}};
+    case 'UPCOMING': {
+      const up = S.appointments.filter(a=>a.status==='upcoming').sort((a,b)=>new Date(a.date)-new Date(b.date));
+      return { text: `${up.length} upcoming appointment${up.length!==1?'s':''} scheduled:`, rich: {type:'appointments', data:up, badge:'upcoming'}};
+    }
+    case 'COMPLETED': {
+      const comp = S.appointments.filter(a=>a.status==='completed').sort((a,b)=>new Date(b.date)-new Date(a.date));
+      return { text: `${comp.length} completed appointment${comp.length!==1?'s':''}:`, rich: {type:'appointments', data:comp, badge:'completed'}};
+    }
+    case 'SHOW_APPOINTMENTS': {
+      const all = [...S.appointments].sort((a,b)=>new Date(b.date)-new Date(a.date));
+      return { text: `All ${all.length} appointments:`, rich: {type:'appointments', data:all, badge:'all'}};
+    }
+    case 'FOLLOWUP_STATUS': {
+      const sent = S.followUps.length, ok = S.followUps.filter(f=>f.resp==='yes').length, rebook = S.followUps.filter(f=>f.resp==='no').length;
+      const pending = S.appointments.filter(a=>a.status==='completed'&&!S.followUps.find(f=>f.aid===a.id));
+      return { text: `Follow-up report:`, rich: {type:'followups', data:S.followUps, sent, ok, rebook, pending:pending.length}};
+    }
+    case 'ANALYTICS': {
+      const total=S.appointments.length, comp=S.appointments.filter(a=>a.status==='completed').length, up=S.appointments.filter(a=>a.status==='upcoming').length;
+      const adhere=S.followUps.length?Math.round(S.followUps.filter(f=>f.adhere).length/S.followUps.length*100):0;
+      return { text:`Clinic overview:`, rich:{type:'analytics',total,comp,up,adhere,patients:S.patients.length,followUps:S.followUps.length}};
+    }
+    case 'REBOOK': {
+      const toRebook = S.followUps.filter(f=>f.resp==='no').map(f=>({...f,appt:S.appointments.find(a=>a.id===f.aid),pat:S.patients.find(p=>p.id===f.pid)}));
+      return { text:`${toRebook.length} patient${toRebook.length!==1?'s':''} need rebooking:`, rich:{type:'rebook',data:toRebook}};
+    }
+    case 'NAMED_PATIENT':
+    case 'PATIENT_LOOKUP': {
+      const pat = findPatientByMsg(msg);
+      if (!pat) return { text:`Patient not found. Try "show all patients".`, rich:null};
+      const appts = S.appointments.filter(a=>a.pid===pat.id).sort((a,b)=>new Date(b.date)-new Date(a.date));
+      const fus = S.followUps.filter(f=>f.pid===pat.id);
+      return { text:`Profile for **${pat.name}**:`, rich:{type:'patient_profile',pat,appts,fus}};
+    }
+    case 'MEDICINE': {
+      const pat = findPatientByMsg(msg);
+      if (pat) {
+        const appts = S.appointments.filter(a=>a.pid===pat.id&&a.rx.length>0);
+        return { text:`Prescriptions for **${pat.name}**:`, rich:{type:'prescriptions',pat,appts}};
+      }
+      const withRx = S.appointments.filter(a=>a.rx.length>0);
+      return { text:`Prescriptions across ${withRx.length} appointments:`, rich:{type:'prescriptions',appts:withRx}};
+    }
+    default:
+      const maybePat = findPatientByMsg(msg);
+      if (maybePat) {
+        const appts=S.appointments.filter(a=>a.pid===maybePat.id).sort((a,b)=>new Date(b.date)-new Date(a.date));
+        const fus=S.followUps.filter(f=>f.pid===maybePat.id);
+        return {text:`Found **${maybePat.name}**:`,rich:{type:'patient_profile',pat:maybePat,appts,fus}};
+      }
+      return { text:`I didn't understand that. Try:\n• "Show upcoming appointments"\n• "Tell me about [patient name]"\n• "Show analytics"`, rich:null};
+  }
+}
+
+function handleBookingMsg(msg) {
+  const c = S._collect;
+  const lower = msg.toLowerCase().trim();
+  if (lower==='reset'||lower==='start over'||lower==='restart') {
+    S._collect={};
+    return {text:`Let's start fresh. Could you tell me your **full name**?`,rich:null};
+  }
+  if (!c.name) {
+    if (INTENTS.GREETING.test(lower)) {
+      return {text:`Hi there! 👋 I'm Medi, your AI appointment assistant at City Care Clinic.\n\nCould you share your **full name** to get started?`,rich:null};
+    }
+    if (lower.includes('?')||lower.length<2) {
+      return {text:`Let me first get your name. What's your **full name** please?`,rich:null};
+    }
+    const existing = S.patients.find(p=>p.name.toLowerCase().includes(lower)||lower.includes(p.name.toLowerCase().split(' ')[0].toLowerCase()));
+    if (existing) {
+      c.name = existing.name; c.pid = existing.id; c.phone = existing.phone;
+      return {text:`Welcome back, **${existing.name}**! 😊 Found your records.\n\nYour registered number is ${existing.phone} — use this, or a different one?`,rich:{type:'patient_mini',pat:existing}};
+    }
+    c.name = msg.trim();
+    return {text:`Nice to meet you, **${c.name}**! 😊\n\nCould you share your **phone number**?`,rich:null};
+  }
+  if (c.name && c.phone && !c.phoneConfirmed) {
+    if (lower.includes('yes')||lower.includes('use this')||lower.includes('same')||lower.includes('correct')) {
+      c.phoneConfirmed = true;
+      return {text:`Great! What **date** would you prefer?\n\n📅 Open Mon–Sat, 9 AM – 6 PM.`,rich:null};
+    } else if (msg.match(/\d{5,}/)) {
+      c.phone = msg.replace(/[^\d+]/g,''); c.phoneConfirmed = true;
+      return {text:`Updated to **${c.phone}**.\n\nWhat **date** works for you?`,rich:null};
+    }
+    return {text:`Use **${c.phone}** for this appointment? (Yes / share different number)`,rich:null};
+  }
+  if (!c.phone) {
+    const phoneMatch = msg.match(/[\d\s\-+()]{8,}/);
+    if (!phoneMatch) return {text:`Could you share your **10-digit mobile number**? 📱`,rich:null};
+    c.phone = msg.trim(); c.phoneConfirmed = true;
+    return {text:`Saved **${c.phone}**. ✅\n\nWhat **date** would you prefer?\n\n📅 Open Mon–Sat, 9 AM – 6 PM.`,rich:null};
+  }
+  if (!c.date) {
+    const dateMap = {'today':'2026-04-02','tomorrow':'2026-04-03','day after':'2026-04-04','monday':'2026-04-06','tuesday':'2026-04-07','wednesday':'2026-04-08','thursday':'2026-04-09','friday':'2026-04-10','saturday':'2026-04-11'};
+    for (const [k,v] of Object.entries(dateMap)) { if (lower.includes(k)){c.date=v;break} }
+    if (!c.date) {
+      const m=msg.match(/april\s*(\d+)/i)||msg.match(/(\d{1,2})[\/\-](\d{1,2})/);
+      if(m)c.date=`2026-04-${String(m[1]).padStart(2,'0')}`;
+    }
+    if (!c.date) return {text:`Mention the date like:\n• "April 7" · "This Friday" · "Next Monday"`,rich:null};
+    return {text:`**${fd(c.date)}** noted! ✅\n\nWhat **time** works for you?`,rich:{type:'time_slots'}};
+  }
+  if (!c.time) {
+    const timeMap={'9':['09:00','9 am','9am','nine'],'10':['10:00','10 am','10am','ten'],'11':['11:00','11 am','11am','eleven'],'12':['12:00','12 pm','noon'],'14':['2 pm','2pm','14:00'],'15':['3 pm','3pm','15:00'],'16':['4 pm','4pm','16:00'],'17':['5 pm','5pm','17:00']};
+    for(const[hr,aliases] of Object.entries(timeMap)){
+      if(aliases.some(a=>lower.includes(a))||lower.includes(hr+':')){c.time=hr.padStart(2,'0')+':00';break;}
+    }
+    if(lower.includes('morning'))c.time='10:00';
+    if(lower.includes('afternoon'))c.time='14:00';
+    if(lower.includes('evening'))c.time='17:00';
+    if(!c.time) return {text:`Which time?\n• Morning: 9 AM, 10 AM, 11 AM\n• Afternoon: 12 PM, 2 PM, 3 PM\n• Evening: 4 PM, 5 PM`,rich:null};
+    return {text:`**${ft(c.time)}** on **${fd(c.date)}** is available! ✅\n\nLastly, what's the **reason for your visit**?`,rich:null};
+  }
+  if (!c.symptoms) {
+    if (lower.length < 3) return {text:`Briefly describe your **symptoms or reason** (e.g. fever, checkup, back pain)?`,rich:null};
+    c.symptoms = msg.trim();
+    return {text:`Here's your appointment summary:`,rich:{type:'booking_confirm',name:c.name,phone:c.phone,date:c.date,time:c.time,symptoms:c.symptoms,isNew:!c.pid}};
+  }
+  if (c.symptoms && !c.confirmed) {
+    if (lower.includes('yes')||lower.includes('confirm')||lower.includes('correct')||lower.includes('ok')||lower==='y') {
+      const newPat = c.pid ? null : {id:uid(),name:c.name,phone:c.phone,dob:'',blood:'',allergies:'',gender:''};
+      if(newPat) S.patients.push(newPat);
+      const newAppt = {id:uid(),pid:c.pid||newPat.id,pname:c.name,date:c.date,time:c.time,symptoms:c.symptoms,status:'upcoming',notes:'',rx:[]};
+      S.appointments.push(newAppt);
+      S.booked={...newAppt};
+      S._collect={};
+      return {text:`🎉 Appointment **confirmed**!`,rich:{type:'booking_done',appt:newAppt}};
+    }
+    if (lower.includes('no')||lower.includes('change')||lower.includes('wrong')) {
+      S._collect={};
+      return {text:`No problem! Let's start over. What's your **name**?`,rich:null};
+    }
+    return {text:`Reply **YES** to confirm or **NO** to start over.`,rich:null};
+  }
+  S._collect={};
+  return {text:`Your appointment is booked! 😊\n\nType "book" to make another appointment.`,rich:null};
+}
+
+/* ── Rich card renderer ── */
+function renderRich(rich) {
+  if(!rich) return '';
+  switch(rich.type) {
+    case 'patients':
+      return `<div class="rich-card">
+        <div class="rich-card-title">👥 Patient Registry</div>
+        ${rich.data.map(p=>{
+          const visits=S.appointments.filter(a=>a.pid===p.id).length;
+          return`<div class="patient-card-mini">
+            <div class="av" style="width:32px;height:32px;font-size:12px;background:${avc(p.name)}">${ini(p.name)}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:500;color:var(--text)">${esc(p.name)}</div>
+              <div style="color:var(--t3);font-size:11px">${esc(p.phone)} · ${visits} visit${visits!==1?'s':''}</div>
+            </div>
+            ${p.allergies&&p.allergies!=='None'?`<span style="font-size:10px;color:var(--amber)">⚠ ${esc(p.allergies)}</span>`:''}
+          </div>`;
+        }).join('')}
+      </div>`;
+    case 'appointments':
+      return `<div class="rich-card">
+        <div class="rich-card-title">📅 Appointments</div>
+        ${rich.data.map(a=>`<div class="appt-card ${a.status==='completed'?'comp':''}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+            <div style="font-weight:500;color:var(--text)">${esc(a.pname)}</div>
+            <span class="badge ${a.status==='completed'?'b-green':'b-blue'}" style="font-size:10px">${a.status}</span>
+          </div>
+          <div style="font-size:11px;color:var(--t3);margin-bottom:3px">📅 ${fd(a.date)} · ⏰ ${ft(a.time)}</div>
+          <div style="font-size:12px;color:var(--t2)">${esc(a.symptoms)}</div>
+        </div>`).join('')}
+        ${rich.data.length===0?`<div style="color:var(--t3);font-size:13px;text-align:center;padding:10px">No appointments found</div>`:''}
+      </div>`;
+    case 'patient_profile': {
+      const p=rich.pat, appts=rich.appts, fus=rich.fus;
+      return `<div class="rich-card">
+        <div class="rich-card-title">👤 Patient Profile</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div class="av" style="width:38px;height:38px;font-size:15px;background:${avc(p.name)}">${ini(p.name)}</div>
+          <div><div style="font-weight:600;color:var(--text)">${esc(p.name)}</div><div style="font-size:11px;color:var(--t3)">${esc(p.phone)}</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px;font-size:12px">
+          ${[['Blood',p.blood||'—'],['Allergies',p.allergies||'None'],['Visits',''+appts.length],['Gender',p.gender||'—']].map(([l,v])=>`<div class="rich-row"><span class="rich-label">${l}</span><span class="rich-val">${esc(v)}</span></div>`).join('')}
+        </div>
+        ${appts.length?`<div style="font-size:11px;color:var(--t3);margin-bottom:5px">VISIT HISTORY</div>${appts.map(a=>`<div class="appt-card ${a.status==='completed'?'comp':''}">
+          <div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:var(--t3)">${fd(a.date)} · ${ft(a.time)}</span><span class="badge ${a.status==='completed'?'b-green':'b-blue'}" style="font-size:10px">${a.status}</span></div>
+          <div style="font-size:12px;color:var(--t2);margin-top:3px">${esc(a.symptoms)}</div>
+          ${a.rx.length?`<div style="font-size:11px;color:var(--teal);margin-top:3px">💊 ${a.rx.map(r=>esc(r.name)).join(', ')}</div>`:''}
+        </div>`).join('')}`:''}
+      </div>`;
+    }
+    case 'prescriptions': {
+      const appts = rich.appts||[];
+      return `<div class="rich-card">
+        <div class="rich-card-title">💊 Prescriptions</div>
+        ${rich.pat?`<div style="font-weight:500;color:var(--text);margin-bottom:8px">${esc(rich.pat.name)}</div>`:''}
+        ${appts.map(a=>`<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--t3);margin-bottom:4px">${fd(a.date)} — ${esc(a.pname)}</div>
+          ${a.rx.map(r=>`<div style="background:var(--bg5);border-radius:6px;padding:8px;margin-bottom:3px"><div style="font-weight:500;color:var(--text);font-size:12px">${esc(r.name)}</div><div style="font-size:11px;color:var(--t3)">${esc(r.dose)} · ${esc(r.days)} days</div></div>`).join('')}
+        </div>`).join('')}
+        ${appts.length===0?`<div style="color:var(--t3);font-size:13px">No prescriptions on record</div>`:''}
+      </div>`;
+    }
+    case 'followups':
+      return `<div class="rich-card">
+        <div class="rich-card-title">📱 Follow-Up Status</div>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="stat-n" style="color:var(--a2)">${rich.sent}</div><div class="stat-l">Sent</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--green)">${rich.ok}</div><div class="stat-l">Feeling OK</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--amber)">${rich.rebook}</div><div class="stat-l">Rebooking</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--t3)">${rich.pending}</div><div class="stat-l">Pending</div></div>
+        </div>
+        ${rich.data.length?`<div style="margin-top:8px">`+rich.data.map(f=>`<div class="rich-row"><span class="rich-label">${esc(f.pname)}</span><span class="badge ${f.resp==='yes'?'b-green':'b-amber'}" style="font-size:10px">${f.resp==='yes'?'OK':'Rebooked'}</span></div>`).join('')+`</div>`:''}
+      </div>`;
+    case 'analytics':
+      return `<div class="rich-card">
+        <div class="rich-card-title">📊 Clinic Analytics</div>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="stat-n" style="color:var(--a2)">${rich.patients}</div><div class="stat-l">Patients</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--text)">${rich.total}</div><div class="stat-l">Appts</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--green)">${rich.comp}</div><div class="stat-l">Completed</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--accent)">${rich.up}</div><div class="stat-l">Upcoming</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--amber)">${rich.adhere}%</div><div class="stat-l">Adherence</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--purple)">${rich.followUps}</div><div class="stat-l">Follow-ups</div></div>
+        </div>
+      </div>`;
+    case 'rebook':
+      return `<div class="rich-card">
+        <div class="rich-card-title">🔄 Needs Rebooking</div>
+        ${rich.data.map(f=>`<div class="appt-card" style="border-left-color:var(--amber)">
+          <div style="font-weight:500;color:var(--text)">${esc(f.pname)}</div>
+          <div style="font-size:11px;color:var(--t3);margin-top:3px">Last: ${fd(f.appt?.date)} · ${esc(f.appt?.symptoms||'')}</div>
+          <div style="font-size:11px;color:var(--amber);margin-top:3px">Still unwell</div>
+        </div>`).join('')}
+        ${rich.data.length===0?`<div style="color:var(--t3);font-size:13px">No patients need rebooking 🎉</div>`:''}
+      </div>`;
+    case 'help':
+      return `<div class="rich-card">
+        <div class="rich-card-title">💡 Commands</div>
+        ${rich.items.map(i=>`<div style="padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--t2)">${esc(i)}</div>`).join('')}
+      </div>`;
+    case 'time_slots':
+      return `<div class="rich-card">
+        <div class="rich-card-title">⏰ Available Slots</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">
+          ${['9:00 AM','10:00 AM','11:00 AM','12:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM'].map(t=>`<span style="background:var(--bg5);border:1px solid var(--b2);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--t2);cursor:pointer" onclick="setTimeFromSlot('${t}')">${t}</span>`).join('')}
+        </div>
+      </div>`;
+    case 'patient_mini': {
+      const p=rich.pat;
+      return `<div class="rich-card">
+        <div class="rich-card-title">✅ Patient Found</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="av" style="width:34px;height:34px;font-size:13px;background:${avc(p.name)}">${ini(p.name)}</div>
+          <div><div style="font-weight:500;color:var(--text)">${esc(p.name)}</div><div style="font-size:12px;color:var(--t3)">${esc(p.phone)} · ${esc(p.blood)}</div></div>
+        </div>
+      </div>`;
+    }
+    case 'booking_confirm':
+      return `<div class="rich-card" style="border-color:var(--accent)">
+        <div class="rich-card-title">📋 Appointment Summary</div>
+        ${[['👤 Name',rich.name],['📱 Phone',rich.phone],['📅 Date',fd(rich.date)],['⏰ Time',ft(rich.time)],['🩺 Reason',rich.symptoms]].map(([l,v])=>`<div class="rich-row"><span class="rich-label">${l}</span><span class="rich-val" style="max-width:160px;text-align:right;font-size:12px">${esc(v)}</span></div>`).join('')}
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn btn-green btn-sm" style="flex:1" onclick="confirmBookingFromBtn()">✓ Confirm</button>
+          <button class="btn btn-g btn-sm" onclick="cancelBookingFromBtn()">✕ Change</button>
+        </div>
+      </div>`;
+    case 'booking_done':
+      return `<div class="rich-card" style="border-color:var(--green)">
+        <div style="color:var(--green);font-weight:600;margin-bottom:8px">✅ Appointment Confirmed!</div>
+        ${[['👤',rich.appt.pname],['📅',`${fd(rich.appt.date)} at ${ft(rich.appt.time)}`],['🩺',rich.appt.symptoms]].map(([i,v])=>`<div style="display:flex;gap:8px;margin-bottom:4px;font-size:12px"><span>${i}</span><span style="color:var(--t2)">${esc(v)}</span></div>`).join('')}
+        <div style="font-size:11px;color:var(--t3);margin-top:8px;border-top:1px solid var(--border);padding-top:6px">📱 WhatsApp confirmation will be sent shortly</div>
+      </div>`;
+    default: return '';
+  }
+}
+
+/* ── Chat actions ── */
+function confirmBookingFromBtn(){addUserMsg('Yes, confirm my appointment');processChat('Yes, confirm my appointment')}
+function cancelBookingFromBtn(){S._collect={};addUserMsg('No, start over');processChat('No, start over')}
+function setTimeFromSlot(t){const msg=`I'd prefer ${t}`;addUserMsg(msg);processChat(msg)}
+
+function addUserMsg(text){S.chatHistory.push({role:'user',content:text,time:now()});renderChat();scrollChat()}
+function addAIMsg(text,rich){S.chatHistory.push({role:'assistant',content:text,time:now(),richData:rich});S.chatBusy=false;renderChat();scrollChat()}
+function scrollChat(){setTimeout(()=>{const el=document.getElementById('msgs-area');if(el)el.scrollTop=el.scrollHeight},30)}
+
+function renderChat(){
+  const area=document.getElementById('msgs-area');
+  if(!area)return;
+  area.innerHTML=buildMsgs();
+}
+
+function switchMode(m){S.chatMode=m;S.chatHistory=[];S.booked=null;S._collect={};renderPage()}
+
+function processChat(text){
+  if(S.chatMode==='doctor'){
+    const {text:t,rich}=generateDoctorResponse(text);addAIMsg(t,rich);
+  } else {
+    const {text:t,rich}=handleBookingMsg(text);addAIMsg(t,rich);
+  }
+}
+
+async function sendMsg(){
+  const inp=document.getElementById('chat-inp');
+  if(!inp)return;
+  const text=inp.value.trim();
+  if(!text||S.chatBusy)return;
+  inp.value='';inp.style.height='auto';
+  S.chatBusy=true;
+  addUserMsg(text);
+  const area=document.getElementById('msgs-area');
+  if(area){
+    const typEl=document.createElement('div');
+    typEl.id='typing-row';typEl.className='typing-row';
+    typEl.innerHTML=`<div class="ai-ring msg-av ai" style="width:30px;height:30px;font-size:13px">🤖</div><div class="typing-bubble"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div>`;
+    area.appendChild(typEl);scrollChat();
+  }
+  await new Promise(r=>setTimeout(r,600+Math.random()*400));
+  const typEl=document.getElementById('typing-row');if(typEl)typEl.remove();
+  processChat(text);
+}
+
+function buildMsgs(){
+  const mode=S.chatMode;
+  if(S.chatHistory.length===0){
+    const greeting=mode==='doctor'
+      ?`Hello, Doctor! 👨‍⚕️ I'm <b>MedAssist</b>.<br><br>Ask me about patients, appointments, prescriptions, or analytics.`
+      :`Hi! 👋 I'm <b>Medi</b>, your appointment assistant.<br><br>To get started, tell me your <b>full name</b>.`;
+    return `<div class="msg-row"><div class="ai-ring msg-av ai" style="width:30px;height:30px;font-size:13px">${mode==='doctor'?'👨‍⚕️':'🤖'}</div>
+      <div class="msg-body"><div class="bubble ai">${greeting}</div><div class="msg-time">${now()}</div></div></div>`;
+  }
+  return S.chatHistory.map(m=>{
+    const isUser=m.role==='user';
+    const text=m.content.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');
+    if(isUser)return `<div class="msg-row user">
+      <div class="msg-av user" style="font-size:13px">👤</div>
+      <div class="msg-body"><div class="bubble user">${esc(m.content)}</div><div class="msg-time">${m.time}</div></div></div>`;
+    return `<div class="msg-row">
+      <div class="ai-ring msg-av ai" style="width:30px;height:30px;font-size:13px">${S.chatMode==='doctor'?'👨‍⚕️':'🤖'}</div>
+      <div class="msg-body"><div class="bubble ai">${text}</div>${m.richData?renderRich(m.richData):''}<div class="msg-time">${m.time}</div></div></div>`;
+  }).join('');
+}
+
+function buildBookingCtx(){
+  const mode=S.chatMode;
+  const quickPrompts=mode==='booking'
+    ?["Hi, I'd like to book","My name is Priya","April 7th please","10 AM works for me","I have a fever","Yes, confirm"]
+    :["Show upcoming appointments","Tell me about Arjun Mehta","Show all patients","Who needs rebooking?","Show analytics","Follow-up status"];
+  return `
+  <div class="ctx-section">
+    <div class="ctx-title">${mode==='booking'?'💬 Sample inputs':'💡 Quick asks'}</div>
+    ${quickPrompts.map(q=>`<button class="quick-btn" onclick="injectPrompt('${q.replace(/'/g,"\\'")}')">${esc(q)}</button>`).join('')}
+  </div>
+  ${S.booked?`<div class="ctx-section"><div class="booked-box"><div class="booked-title">✅ Booked</div>
+    <div class="booked-row">👤 <span>${esc(S.booked.pname)}</span></div>
+    <div class="booked-row">📅 <span>${fd(S.booked.date)} at ${ft(S.booked.time)}</span></div>
+  </div></div>`:''}
+  <div class="ctx-section">
+    <div class="ctx-title">ℹ How it works</div>
+    <div style="font-size:12px;color:var(--t3);line-height:1.9">
+      ${mode==='booking'?'① Name → ② Phone → ③ Date → ④ Time → ⑤ Symptoms → ⑥ Confirm':'Ask about patients, appointments, prescriptions, or clinic analytics.'}
+    </div>
+  </div>`;
+}
+
+function injectPrompt(text){const inp=document.getElementById('chat-inp');if(inp){inp.value=text;inp.focus()}}
+
+/* ── Page builders ── */
+function buildChat(){
+  const mode=S.chatMode;
+  return `
+  <div class="topbar">
+    <div><div class="pg-title">AI Assistant</div></div>
+    <div class="topbar-r">
+      <div class="mode-tabs">
+        <button class="mode-tab ${mode==='booking'?'active':''}" onclick="switchMode('booking')">🤖 Booking</button>
+        <button class="mode-tab ${mode==='doctor'?'active':''}" onclick="switchMode('doctor')">👨‍⚕️ Doctor</button>
       </div>
     </div>
-    ${nextAppt?`
-    <div class="sec-title">Next Appointment</div>
-    <div class="appt-card upcoming mb20" onclick="openApptDetail('${nextAppt.id}')">
-      <div class="appt-head">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div class="avatar" style="width:40px;height:40px;font-size:14px;background:${avColor(nextAppt.pname)}">${initials(nextAppt.pname)}</div>
-          <div class="appt-name">${esc(nextAppt.pname)}</div>
+  </div>
+  <div class="chat-page">
+    <div class="chat-panel">
+      <div class="chat-hdr">
+        <div class="chat-hdr-l">
+          <div class="ai-ring" style="width:34px;height:34px;font-size:16px">${mode==='booking'?'🤖':'👨‍⚕️'}</div>
+          <div>
+            <div class="chat-name">${mode==='booking'?'Medi — Booking':'MedAssist — Doctor AI'}</div>
+            <div class="chat-status">● Online · Real-time clinic data</div>
+          </div>
         </div>
-        <span class="appt-chip upcoming">Upcoming</span>
+        <button class="btn btn-g btn-sm" onclick="S.chatHistory=[];S.booked=null;S._collect={};renderPage()">↺ Clear</button>
       </div>
-      <div class="appt-row"><span class="appt-icon">📅</span>${fmtDate(nextAppt.date)}</div>
-      <div class="appt-row"><span class="appt-icon">⏰</span>${fmtTime(nextAppt.time)}</div>
-      <div class="appt-row"><span class="appt-icon">🩺</span>${esc(nextAppt.symptoms)}</div>
-    </div>`:''}
-    <div class="sec-title">Quick Actions</div>
-    <div class="action-grid">
-      <button class="action-btn" onclick="setTab('book')">
-        <div class="action-icon">📝</div>
-        <div class="action-label">Book Appointment</div>
-        <div class="action-sub">Add a new visit</div>
-      </button>
-      <button class="action-btn" onclick="setTab('patients')">
-        <div class="action-icon">🔍</div>
-        <div class="action-label">Find Patient</div>
-        <div class="action-sub">Search records</div>
-      </button>
-      <button class="action-btn" onclick="S.apptFilter='upcoming';setTab('appointments')">
-        <div class="action-icon">📋</div>
-        <div class="action-label">Today's Schedule</div>
-        <div class="action-sub">View upcoming</div>
-      </button>
-      <button class="action-btn" onclick="setTab('followup')">
-        <div class="action-icon">💊</div>
-        <div class="action-label">Check Follow-ups</div>
-        <div class="action-sub">Patient updates</div>
-      </button>
-    </div>`;
+      <div class="msgs-area" id="msgs-area">${buildMsgs()}</div>
+      <div class="chat-input-bar">
+        <textarea class="chat-textarea" id="chat-inp" rows="1" placeholder="${mode==='booking'?'Your name, date, symptoms…':'Ask about patients, analytics…'}"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"></textarea>
+        <button class="send-btn" onclick="sendMsg()">
+          <svg class="send-icon" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="ctx-panel">${buildBookingCtx()}</div>
+  </div>`;
 }
 
-function pageAppointments(){
-  if(S.selApptId) return pageApptDetail(S.selApptId);
+function buildDashboard(){
+  const {appointments:a,followUps:f,patients:p}=S;
+  const comp=a.filter(x=>x.status==='completed').length, up=a.filter(x=>x.status==='upcoming').length;
+  const adhere=f.length?Math.round(f.filter(x=>x.adhere).length/f.length*100):0;
+  const rebook=f.filter(x=>x.resp==='no').length;
+  const wk=[{d:'Mon',v:4},{d:'Tue',v:6},{d:'Wed',v:3},{d:'Thu',v:8},{d:'Fri',v:5},{d:'Sat',v:7},{d:'Sun',v:2}];
+  const mx=Math.max(...wk.map(w=>w.v));
+  return`
+  <div class="topbar">
+    <div><div class="pg-title">Dashboard</div><div class="pg-sub">April 2026 · City Care Clinic</div></div>
+    <div class="topbar-r"><span class="badge b-green">● Online</span></div>
+  </div>
+  <div class="content">
+    <div class="metrics">
+      <div class="metric c-blue"><div class="mlabel">Appts</div><div class="mval">${a.length}</div><div class="msub">Total</div></div>
+      <div class="metric c-green"><div class="mlabel">Done</div><div class="mval">${comp}</div><div class="msub">${a.length?Math.round(comp/a.length*100):0}%</div></div>
+      <div class="metric c-amber"><div class="mlabel">Adherence</div><div class="mval">${adhere}%</div><div class="msub">Follow-ups</div></div>
+      <div class="metric c-purple"><div class="mlabel">Follow-ups</div><div class="mval">${f.length}</div><div class="msub">${rebook} rebook</div></div>
+    </div>
+    <div class="grid2" style="margin-bottom:12px">
+      <div class="card">
+        <div class="section-t">Weekly Appointments</div>
+        <div class="bar-chart">${wk.map(w=>`<div class="bar-col">
+          <div class="bar-v">${w.v}</div>
+          <div class="bar" style="height:${Math.round(w.v/mx*100)}px"></div>
+          <div class="bar-lbl">${w.d}</div>
+        </div>`).join('')}</div>
+      </div>
+      <div class="card">
+        <div class="section-t">Overview</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+          ${[['Upcoming',up,'b-blue'],['Completed',comp,'b-green'],['Follow-ups',f.length,'b-purple'],['Patients',p.length,'b-teal']].map(([l,v,b])=>`<div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:13px;color:var(--t2)">${l}</span>
+            <span class="badge ${b}">${v}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border)"><div class="section-t" style="margin:0">Recent Appointments</div></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Patient</th><th class="hide-mobile">Date</th><th class="hide-mobile">Time</th><th>Symptoms</th><th>Status</th></tr></thead>
+        <tbody>${[...a].sort((x,y)=>new Date(y.date)-new Date(x.date)).slice(0,6).map(x=>`<tr>
+          <td style="color:var(--text);font-weight:500;white-space:nowrap">${esc(x.pname.split(' ')[0])}</td>
+          <td class="hide-mobile">${fd(x.date)}</td><td class="hide-mobile">${ft(x.time)}</td>
+          <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.symptoms)}</td>
+          <td><span class="badge ${x.status==='completed'?'b-green':'b-blue'}" style="font-size:10px">${x.status==='completed'?'Done':'Soon'}</span></td>
+        </tr>`).join('')}</tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+
+function buildAppointments(){
   const f=S.apptFilter;
   const all=[...S.appointments].sort((a,b)=>new Date(b.date)-new Date(a.date));
   const list=f==='all'?all:all.filter(a=>a.status===f);
   return`
-    <div class="filter-tabs">
-      ${[['all','All'],['upcoming','Upcoming'],['completed','Done']].map(([v,l])=>`<button class="ftab ${f===v?'act':''}" onclick="S.apptFilter='${v}';render()">${l} ${v==='all'?all.length:all.filter(a=>a.status===v).length}</button>`).join('')}
+  <div class="topbar">
+    <div><div class="pg-title">Appointments</div><div class="pg-sub">${S.appointments.length} total</div></div>
+    <div class="topbar-r">${['all','upcoming','completed'].map(s=>`<button class="btn btn-sm ${f===s?'btn-p':'btn-g'}" onclick="S.apptFilter='${s}';renderPage()">${s==='all'?'All':s==='upcoming'?'Soon':'Done'}</button>`).join('')}</div>
+  </div>
+  <div class="content">
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Patient</th><th class="hide-mobile">Date & Time</th><th class="hide-mobile">Symptoms</th><th>Status</th><th></th></tr></thead>
+        <tbody>${list.map(a=>`<tr>
+          <td><div style="display:flex;align-items:center;gap:7px">
+            <div class="av" style="width:26px;height:26px;font-size:10px;flex-shrink:0;background:${avc(a.pname)}">${ini(a.pname)}</div>
+            <div>
+              <div style="color:var(--text);font-weight:500;font-size:13px">${esc(a.pname)}</div>
+              <div class="hide-desktop" style="font-size:10px;color:var(--t3);display:none">${fd(a.date)}</div>
+            </div>
+          </div></td>
+          <td class="hide-mobile" style="white-space:nowrap">${fd(a.date)}<br><span style="font-size:11px;color:var(--t3)">${ft(a.time)}</span></td>
+          <td class="hide-mobile" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.symptoms)}</td>
+          <td><span class="badge ${a.status==='completed'?'b-green':'b-blue'}" style="font-size:10px">${a.status==='completed'?'Done':'Soon'}</span></td>
+          <td><button class="btn btn-g btn-sm" onclick="openModal('${a.id}')" style="white-space:nowrap">${a.status==='upcoming'?'✏️ Edit':'👁 View'}</button></td>
+        </tr>`).join('')}
+        ${list.length===0?`<tr><td colspan="5"><div class="empty">No appointments</div></td></tr>`:''}
+        </tbody>
+      </table></div>
     </div>
-    ${list.map(a=>`
-    <div class="appt-card ${a.status}" onclick="openApptDetail('${a.id}')">
-      <div class="appt-head">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div class="avatar" style="width:40px;height:40px;font-size:14px;background:${avColor(a.pname)}">${initials(a.pname)}</div>
-          <div class="appt-name">${esc(a.pname)}</div>
-        </div>
-        <span class="appt-chip ${a.status}">${a.status==='completed'?'Done':'Upcoming'}</span>
-      </div>
-      <div class="appt-row"><span class="appt-icon">📅</span>${fmtDate(a.date)}</div>
-      <div class="appt-row"><span class="appt-icon">⏰</span>${fmtTime(a.time)}</div>
-      <div class="appt-row"><span class="appt-icon">🩺</span>${esc(a.symptoms)}</div>
-      ${a.rx.length?`<div class="appt-row"><span class="appt-icon">💊</span>${a.rx.map(r=>esc(r.name)).join(', ')}</div>`:''}
+  </div>
+  ${S.modalAppt?buildModal():''}`;
+}
+
+function buildModal(){
+  const a=S.modalAppt, rx=S.modalRx||[];
+  return`<div class="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr"><span>📋 ${esc(a.pname)}</span><button class="btn btn-g btn-sm" onclick="closeModal()">✕</button></div>
+    <div style="background:var(--bg3);border-radius:var(--rs);padding:10px 12px;margin-bottom:12px;font-size:13px;color:var(--t2);border:1px solid var(--border)">
+      📅 ${fd(a.date)} at ${ft(a.time)}<br><span style="color:var(--t3)">🩺 ${esc(a.symptoms)}</span>
+    </div>
+    <div class="fg">
+      <div class="flabel"><span>Doctor Notes</span><button class="btn btn-g btn-sm" onclick="aiSuggest()">✨ AI Suggest</button></div>
+      <textarea class="finput" id="modal-notes" oninput="S.modalNotes=this.value" placeholder="Clinical observations…">${esc(S.modalNotes)}</textarea>
+    </div>
+    <div class="section-t" style="font-size:13px">Prescriptions</div>
+    ${rx.map((r,i)=>`<div style="background:var(--bg3);border-radius:var(--rs);padding:8px 10px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;font-size:13px;border:1px solid var(--border)">
+      <div><div style="font-weight:500">${esc(r.name)}</div><div style="color:var(--t3);font-size:12px">${esc(r.dose)} · ${esc(r.days)} days</div></div>
+      <button class="btn btn-g btn-sm" onclick="removeRx(${i})" style="color:var(--red)">✕</button>
     </div>`).join('')}
-    ${list.length===0?`<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">No appointments here yet</div></div>`:''}`;
+    <div class="grid-rx" style="display:grid;grid-template-columns:1fr 1fr 70px auto;gap:6px;margin-bottom:14px">
+      <input class="finput" id="rx-name" placeholder="Medicine"/>
+      <input class="finput" id="rx-dose" placeholder="Dosage"/>
+      <input class="finput" id="rx-days" placeholder="Days" type="number"/>
+      <button class="btn btn-p" onclick="addRx()" style="white-space:nowrap">+ Add</button>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveAppt()">✓ Save & Complete</button>
+    </div>
+  </div></div>`;
 }
 
-function openApptDetail(id){S.selApptId=id;S.tab='appointments';render()}
-
-function pageApptDetail(id){
-  const a=S.appointments.find(x=>x.id===id);
-  if(!a)return'';
-  const pat=S.patients.find(p=>p.id===a.pid);
-  return`
-    <button class="back-btn" onclick="S.selApptId=null;render()">← Back</button>
-    <div class="detail-header">
-      <div class="detail-avatar" style="background:${avColor(a.pname)}">${initials(a.pname)}</div>
-      <div>
-        <div class="detail-name">${esc(a.pname)}</div>
-        <div class="detail-sub">${fmtDate(a.date)} · ${fmtTime(a.time)}</div>
-      </div>
-    </div>
-    <div class="info-block mb16">
-      <div class="info-row"><span class="info-key">📅 Date</span><span class="info-val">${fmtDate(a.date)}</span></div>
-      <div class="info-row"><span class="info-key">⏰ Time</span><span class="info-val">${fmtTime(a.time)}</span></div>
-      <div class="info-row"><span class="info-key">🩺 Symptoms</span><span class="info-val" style="text-align:right;max-width:60%">${esc(a.symptoms)}</span></div>
-      <div class="info-row"><span class="info-key">Status</span><span class="appt-chip ${a.status}">${a.status==='completed'?'Done':'Upcoming'}</span></div>
-    </div>
-    ${a.notes?`<div class="info-block mb16"><div style="font-size:13px;font-weight:700;color:var(--t3);margin-bottom:8px">📝 Doctor Notes</div><div style="font-size:14px;font-weight:600;color:var(--t2);line-height:1.6">${esc(a.notes)}</div></div>`:''}
-    ${a.rx.length?`
-    <div class="sec-title">Prescriptions</div>
-    ${a.rx.map(r=>`<div class="rx-item"><div class="rx-name">💊 ${esc(r.name)}</div><div class="rx-detail">${esc(r.dose)} · ${esc(r.days)} days</div></div>`).join('')}`:''}
-    ${a.status==='upcoming'?`<button class="submit-btn" onclick="openUpdateModal('${a.id}')">✏️ Add Notes & Medicines</button>`:''}
-    ${pat?`<button class="cancel-btn" onclick="S.selPatId='${pat.id}';S.tab='patients';S.selApptId=null;render()">👤 View Patient Profile</button>`:''}`;
-}
-
-function pagePatients(){
-  if(S.selPatId) return pagePatientDetail(S.selPatId);
+function buildPatients(){
   const s=S.patSearch.toLowerCase();
   const list=S.patients.filter(p=>p.name.toLowerCase().includes(s)||p.phone.includes(s));
-  return`
-    <div class="search-wrap mb16">
-      <span class="search-icon">🔍</span>
-      <input class="search-bar" placeholder="Search by name or phone…" value="${esc(S.patSearch)}" oninput="S.patSearch=this.value;render()" style="padding-left:40px"/>
-    </div>
-    ${list.map(p=>{
-      const visits=S.appointments.filter(a=>a.pid===p.id).length;
-      return`<div class="patient-card" onclick="S.selPatId='${p.id}';render()">
-        <div class="avatar" style="background:${avColor(p.name)}">${initials(p.name)}</div>
-        <div class="patient-info">
-          <div class="patient-name">${esc(p.name)}</div>
-          <div class="patient-meta">📱 ${esc(p.phone)} · 🩸 ${esc(p.blood||'—')}</div>
-        </div>
-        <div class="patient-badge ${p.allergies&&p.allergies!=='None'?'allergy':''}">${p.allergies&&p.allergies!=='None'?'⚠ '+esc(p.allergies):visits+' visit'+(visits!==1?'s':'')}</div>
-      </div>`;
-    }).join('')}
-    ${list.length===0?`<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">No patients found</div></div>`:''}`;
-}
-
-function pagePatientDetail(pid){
-  const p=S.patients.find(x=>x.id===pid);
-  if(!p)return'';
-  const appts=S.appointments.filter(a=>a.pid===p.id).sort((a,b)=>new Date(b.date)-new Date(a.date));
-  const fus=S.followUps.filter(f=>f.pid===p.id);
-  return`
-    <button class="back-btn" onclick="S.selPatId=null;render()">← Back to Patients</button>
-    <div class="detail-header">
-      <div class="detail-avatar" style="background:${avColor(p.name)}">${initials(p.name)}</div>
-      <div>
-        <div class="detail-name">${esc(p.name)}</div>
-        <div class="detail-sub">${esc(p.phone)}</div>
-      </div>
-    </div>
-    <div class="info-block mb16">
-      <div class="info-row"><span class="info-key">🩸 Blood Group</span><span class="info-val">${esc(p.blood||'—')}</span></div>
-      <div class="info-row"><span class="info-key">🎂 Date of Birth</span><span class="info-val">${fmtDate(p.dob)}</span></div>
-      <div class="info-row"><span class="info-key">⚠ Allergies</span><span class="info-val" style="color:${p.allergies&&p.allergies!=='None'?'var(--peach3)':'var(--mint3)'}">${esc(p.allergies||'None')}</span></div>
-      <div class="info-row"><span class="info-key">📋 Total Visits</span><span class="info-val">${appts.length}</span></div>
-    </div>
-    ${appts.length?`
-    <div class="sec-title">Visits</div>
-    ${appts.map(a=>`<div class="appt-card ${a.status}" onclick="S.selApptId='${a.id}';S.tab='appointments';S.selPatId=null;render()">
-      <div class="appt-head"><span class="appt-name" style="font-size:14px">${fmtDate(a.date)} · ${fmtTime(a.time)}</span><span class="appt-chip ${a.status}">${a.status==='completed'?'Done':'Soon'}</span></div>
-      <div class="appt-row"><span class="appt-icon">🩺</span>${esc(a.symptoms)}</div>
-      ${a.rx.length?`<div class="appt-row"><span class="appt-icon">💊</span>${a.rx.map(r=>esc(r.name)).join(', ')}</div>`:''}
-    </div>`).join('')}`:''}
-    ${fus.length?`
-    <div class="sec-title">Follow-up History</div>
-    ${fus.map(f=>`<div class="fu-card">
-      <div class="fu-top">
-        <div><div class="fu-name">WhatsApp Follow-up</div><div class="fu-date">${new Date(f.sent).toLocaleDateString('en-IN')}</div></div>
-        <span class="fu-status ${f.resp==='yes'?'ok':'warn'}">${f.resp==='yes'?'✅ Doing well':'⚠️ Needs rebook'}</span>
-      </div>
-      <div class="fu-note">${esc(f.note)}</div>
-    </div>`).join('')}`:''}`;
-}
-
-function pageBook(){
-  if(S.bookSuccess){
-    const d=S.bookData;
+  if(S.selPat){
+    const p=S.patients.find(x=>x.id===S.selPat);
+    const appts=S.appointments.filter(a=>a.pid===p.id).sort((a,b)=>new Date(b.date)-new Date(a.date));
+    const fus=S.followUps.filter(f=>f.pid===p.id);
     return`
-      <div class="success-banner">
-        <div class="success-icon">🎉</div>
-        <div class="success-text">
-          <div class="bold">Appointment Booked!</div>
-          <div class="sub">${esc(d.pname)} · ${fmtDate(d.date)} at ${fmtTime(d.time)}</div>
-        </div>
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-g btn-sm" onclick="S.selPat=null;renderPage()">← Back</button>
+        <div class="pg-title">Patient Profile</div>
       </div>
-      <div class="info-block mb16">
-        <div class="info-row"><span class="info-key">👤 Patient</span><span class="info-val">${esc(d.pname)}</span></div>
-        <div class="info-row"><span class="info-key">📱 Phone</span><span class="info-val">${esc(d.phone)}</span></div>
-        <div class="info-row"><span class="info-key">📅 Date</span><span class="info-val">${fmtDate(d.date)}</span></div>
-        <div class="info-row"><span class="info-key">⏰ Time</span><span class="info-val">${fmtTime(d.time)}</span></div>
-        <div class="info-row"><span class="info-key">🩺 Reason</span><span class="info-val" style="text-align:right;max-width:60%">${esc(d.symptoms)}</span></div>
-      </div>
-      <button class="submit-btn" onclick="S.bookSuccess=false;S.bookData={};S.bookStep=0;render()">📝 Book Another</button>
-      <button class="cancel-btn" onclick="S.tab='appointments';render()">📅 View All Appointments</button>`;
-  }
-  const step=S.bookStep, d=S.bookData;
-  const STEPS=['Patient Info','Choose Date','Choose Time','Symptoms','Confirm'];
-  const stepBar=`<div style="display:flex;gap:6px;margin-bottom:20px;align-items:center">
-    ${STEPS.map((s,i)=>`<div style="flex:1;height:4px;border-radius:4px;background:${i<=step?'var(--sky3)':'var(--border)'}"></div>`).join('')}
-  </div>
-  <div style="font-size:13px;font-weight:700;color:var(--t3);margin-bottom:6px">Step ${step+1} of ${STEPS.length}</div>
-  <div style="font-size:20px;font-weight:800;margin-bottom:20px">${['Who is this for?','Pick a date','Pick a time','What\'s the reason?','Confirm details'][step]}</div>`;
-
-  if(step===0){
-    const existing=S.patients;
-    return stepBar+`
-      <div class="form-card">
-        <label class="field-label">Patient Name</label>
-        <input class="field-input" id="b-name" placeholder="Full name…" value="${esc(d.name||'')}"/>
-        <label class="field-label">Phone Number</label>
-        <input class="field-input" id="b-phone" placeholder="Mobile number…" value="${esc(d.phone||'')}"/>
-        ${existing.length?`<div style="font-size:13px;font-weight:700;color:var(--t3);margin-bottom:8px">Or pick an existing patient:</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-        ${existing.map(p=>`<button style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-family:'Nunito',sans-serif;text-align:left;transition:.12s" onclick="pickPatient('${p.id}')">
-          <div style="width:36px;height:36px;border-radius:50%;background:${avColor(p.name)};display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0">${initials(p.name)}</div>
-          <div><div style="font-size:14px;font-weight:700">${esc(p.name)}</div><div style="font-size:11px;color:var(--t3);font-weight:600">${esc(p.phone)}</div></div>
-        </button>`).join('')}
-        </div>`:''}
-        <button class="submit-btn" style="margin-top:16px" onclick="step0Next()">Next →</button>
-      </div>`;
-  }
-  if(step===1){
-    const dates=[
-      {label:'Today',val:'2026-04-03'},{label:'Tomorrow',val:'2026-04-04'},
-      {label:'Mon Apr 6',val:'2026-04-06'},{label:'Tue Apr 7',val:'2026-04-07'},
-      {label:'Wed Apr 8',val:'2026-04-08'},{label:'Thu Apr 9',val:'2026-04-09'},
-      {label:'Fri Apr 10',val:'2026-04-10'},{label:'Sat Apr 11',val:'2026-04-11'},
-    ];
-    return stepBar+`
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
-        ${dates.map(dt=>`<button style="padding:14px 10px;border-radius:var(--rs);border:1.5px solid ${d.date===dt.val?'var(--sky3)':'var(--border)'};background:${d.date===dt.val?'var(--sky)':'var(--white)'};color:${d.date===dt.val?'var(--sky3)':'var(--t2)'};font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.12s" onclick="S.bookData.date='${dt.val}';render()">${dt.label}</button>`).join('')}
-      </div>
-      <button class="submit-btn" onclick="step1Next()" ${!d.date?'disabled':''}>Next →</button>
-      <button class="cancel-btn" onclick="S.bookStep=0;render()">← Back</button>`;
-  }
-  if(step===2){
-    const times=[{l:'9:00 AM',v:'09:00'},{l:'10:00 AM',v:'10:00'},{l:'11:00 AM',v:'11:00'},{l:'12:00 PM',v:'12:00'},{l:'2:00 PM',v:'14:00'},{l:'3:00 PM',v:'15:00'},{l:'4:00 PM',v:'16:00'},{l:'5:00 PM',v:'17:00'}];
-    return stepBar+`
-      <div class="time-grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
-        ${times.map(t=>`<button class="time-chip ${d.time===t.v?'sel':''}" onclick="S.bookData.time='${t.v}';render()">${t.l}</button>`).join('')}
-      </div>
-      <button class="submit-btn" onclick="step2Next()" ${!d.time?'disabled':''}>Next →</button>
-      <button class="cancel-btn" onclick="S.bookStep=1;render()">← Back</button>`;
-  }
-  if(step===3){
-    const reasons=['Fever / Cold','Back pain','Diabetes check','Eye problem','Knee / Joint pain','Cough','Routine check-up','Other'];
-    return stepBar+`
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-        ${reasons.map(r=>`<button style="padding:12px 10px;border-radius:var(--rs);border:1.5px solid ${d.symptoms===r?'var(--sky3)':'var(--border)'};background:${d.symptoms===r?'var(--sky)':'var(--white)'};color:${d.symptoms===r?'var(--sky3)':'var(--t2)'};font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;text-align:center;transition:.12s" onclick="S.bookData.symptoms='${r}';render()">${r}</button>`).join('')}
-      </div>
-      <div class="form-card">
-        <label class="field-label">Or describe it yourself:</label>
-        <textarea class="field-input" id="b-symptoms" placeholder="Type symptoms…" oninput="S.bookData.symptoms=this.value">${esc(d.symptoms||'')}</textarea>
-      </div>
-      <button class="submit-btn" onclick="step3Next()" ${!d.symptoms?'disabled':''}>Next →</button>
-      <button class="cancel-btn" onclick="S.bookStep=2;render()">← Back</button>`;
-  }
-  if(step===4){
-    return stepBar+`
-      <div class="info-block mb16">
-        <div class="info-row"><span class="info-key">👤 Patient</span><span class="info-val">${esc(d.pname||d.name)}</span></div>
-        <div class="info-row"><span class="info-key">📱 Phone</span><span class="info-val">${esc(d.phone)}</span></div>
-        <div class="info-row"><span class="info-key">📅 Date</span><span class="info-val">${fmtDate(d.date)}</span></div>
-        <div class="info-row"><span class="info-key">⏰ Time</span><span class="info-val">${fmtTime(d.time)}</span></div>
-        <div class="info-row"><span class="info-key">🩺 Reason</span><span class="info-val" style="text-align:right;max-width:60%">${esc(d.symptoms)}</span></div>
-      </div>
-      <div style="background:var(--sky);border-radius:var(--rs);padding:12px 14px;margin-bottom:16px;font-size:13px;font-weight:600;color:var(--sky3)">
-        ✅ Everything looks good! Tap confirm to book.
-      </div>
-      <button class="submit-btn" onclick="confirmBook()">🎉 Confirm Booking</button>
-      <button class="cancel-btn" onclick="S.bookStep=3;render()">← Back</button>`;
-  }
-  return '';
-}
-
-function pickPatient(pid){
-  const p=S.patients.find(x=>x.id===pid);
-  if(!p)return;
-  S.bookData.pid=p.id;S.bookData.pname=p.name;S.bookData.name=p.name;S.bookData.phone=p.phone;
-  render();
-  document.getElementById('b-name').value=p.name;
-  document.getElementById('b-phone').value=p.phone;
-}
-function step0Next(){
-  const name=document.getElementById('b-name')?.value.trim()||S.bookData.name;
-  const phone=document.getElementById('b-phone')?.value.trim()||S.bookData.phone;
-  if(!name){alert('Please enter the patient name');return}
-  S.bookData.name=name;S.bookData.pname=name;S.bookData.phone=phone||'—';
-  if(!S.bookData.pid){
-    const existing=S.patients.find(p=>p.name.toLowerCase()===name.toLowerCase());
-    if(existing){S.bookData.pid=existing.id;S.bookData.pname=existing.name}
-  }
-  S.bookStep=1;render();
-}
-function step1Next(){S.bookStep=2;render()}
-function step2Next(){S.bookStep=3;render()}
-function step3Next(){
-  const txt=document.getElementById('b-symptoms')?.value.trim();
-  if(txt)S.bookData.symptoms=txt;
-  if(!S.bookData.symptoms){alert('Please enter the reason for visit');return}
-  S.bookStep=4;render();
-}
-function confirmBook(){
-  const d=S.bookData;
-  if(!d.pid){const p={id:uid(),name:d.name,phone:d.phone,dob:'',blood:'',allergies:'',gender:''};S.patients.push(p);d.pid=p.id}
-  const appt={id:uid(),pid:d.pid,pname:d.pname||d.name,date:d.date,time:d.time,symptoms:d.symptoms,status:'upcoming',notes:'',rx:[]};
-  S.appointments.push(appt);
-  S.bookSuccess=true;render();
-}
-
-function pageFollowup(){
-  const done=S.appointments.filter(a=>a.status==='completed');
-  const ok=S.followUps.filter(f=>f.resp==='yes').length;
-  const rebook=S.followUps.filter(f=>f.resp==='no').length;
-  return`
-    <div class="stat-row mb20">
-      <div class="stat-card mint"><div class="stat-icon">😊</div><div class="stat-num">${ok}</div><div class="stat-label">Feeling Good</div></div>
-      <div class="stat-card peach"><div class="stat-icon">🔄</div><div class="stat-num">${rebook}</div><div class="stat-label">Need Rebook</div></div>
     </div>
-    <div class="sec-title">Completed Visits</div>
-    ${done.map(a=>{
-      const fu=S.followUps.find(f=>f.aid===a.id);
-      const wa=S.waMessages[a.id]||[];
-      return`<div class="fu-card">
-        <div class="fu-top">
-          <div>
-            <div class="fu-name">${esc(a.pname)}</div>
-            <div class="fu-date">Visited ${fmtDate(a.date)}</div>
+    <div class="content">
+      <div class="grid2" style="margin-bottom:12px">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div class="av" style="width:48px;height:48px;font-size:18px;background:${avc(p.name)}">${ini(p.name)}</div>
+            <div><div style="font-size:17px;font-weight:600">${esc(p.name)}</div><div style="font-size:13px;color:var(--t3)">${esc(p.phone)}</div></div>
           </div>
-          ${fu?`<span class="fu-status ${fu.resp==='yes'?'ok':'warn'}">${fu.resp==='yes'?'✅ Doing well':'⚠️ Rebook'}</span>`
-            :`<button class="sim-btn" style="width:auto;padding:7px 14px;margin:0" onclick="simFollowUp('${a.id}')" ${S.simRunning===a.id?'disabled':''}>
-              ${S.simRunning===a.id?'Sending…':'📱 Send Check-up'}
-            </button>`}
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+            ${[['Blood',p.blood||'—'],['DOB',fd(p.dob)],['Allergies',p.allergies||'None'],['Visits',''+appts.length]].map(([l,v])=>`<div><div style="color:var(--t3);margin-bottom:2px;font-size:11px">${l}</div><div style="font-weight:500">${esc(v)}</div></div>`).join('')}
+          </div>
         </div>
-        <div class="fu-note">${esc(a.symptoms)}</div>
-        ${wa.length?`<div class="wa-wrap"><div class="wa-header">📱 WHATSAPP</div>
-          ${wa.map(m=>`<div class="wa-msg ${m.from==='patient'?'r':''}">
-            <div>
-              <div class="wa-bubble ${m.from==='clinic'?'wa-clinic':'wa-patient'}">${esc(m.text)}</div>
-              <div class="wa-time" style="text-align:${m.from==='clinic'?'left':'right'}">${m.from==='clinic'?'🏥 Clinic':'👤 Patient'}</div>
+        <div class="card">
+          <div class="section-t">Follow-up History</div>
+          ${fus.length===0?`<div style="color:var(--t3);font-size:13px">No follow-ups</div>`:''}
+          ${fus.map(f=>`<div style="background:var(--bg3);border-radius:var(--rs);padding:8px;margin-bottom:6px;border:1px solid var(--border);font-size:13px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+              <span style="color:var(--t3);font-size:11px">${new Date(f.sent).toLocaleDateString('en-IN')}</span>
+              <span class="badge ${f.resp==='yes'?'b-green':'b-amber'}">${f.resp==='yes'?'✓ OK':'⚠ Rebooked'}</span>
             </div>
+            <div style="color:var(--t2);font-size:12px">${esc(f.note)}</div>
           </div>`).join('')}
-        </div>`:''}
-        ${fu&&wa.length===0?`<div style="margin-top:8px"><div class="fu-note" style="background:var(--mint);color:#2d7a50">${esc(fu.note)}</div></div>`:''}
-      </div>`;
-    }).join('')}
-    ${done.length===0?`<div class="empty"><div class="empty-icon">💬</div><div class="empty-text">No completed visits yet</div></div>`:''}`;
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border)"><div class="section-t" style="margin:0">Appointment History</div></div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Date</th><th class="hide-mobile">Time</th><th>Symptoms</th><th>Status</th></tr></thead>
+          <tbody>${appts.map(a=>`<tr>
+            <td style="white-space:nowrap">${fd(a.date)}</td>
+            <td class="hide-mobile">${ft(a.time)}</td>
+            <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.symptoms)}</td>
+            <td><span class="badge ${a.status==='completed'?'b-green':'b-blue'}" style="font-size:10px">${a.status==='completed'?'Done':'Soon'}</span></td>
+          </tr>`).join('')}
+          ${appts.length===0?`<tr><td colspan="4"><div class="empty">No appointments</div></td></tr>`:''}
+          </tbody>
+        </table></div>
+      </div>
+    </div>`;
+  }
+  return`
+  <div class="topbar">
+    <div><div class="pg-title">Patients</div><div class="pg-sub">${S.patients.length} registered</div></div>
+    <div class="topbar-r"><input class="finput" style="width:160px;padding:6px 10px;font-size:12px" placeholder="Search…" value="${esc(S.patSearch)}" oninput="S.patSearch=this.value;renderPage()"/></div>
+  </div>
+  <div class="content">
+    <div class="pat-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px">
+      ${list.map(p=>{
+        const visits=S.appointments.filter(a=>a.pid===p.id).length;
+        return`<div class="card" style="cursor:pointer" onclick="S.selPat='${p.id}';renderPage()">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <div class="av" style="width:40px;height:40px;font-size:16px;background:${avc(p.name)}">${ini(p.name)}</div>
+            <div><div style="font-weight:600">${esc(p.name)}</div><div style="font-size:12px;color:var(--t3)">${esc(p.phone)}</div></div>
+          </div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            ${p.blood?`<span class="tag">🩸 ${esc(p.blood)}</span>`:''}
+            <span class="tag">📅 ${visits} visit${visits!==1?'s':''}</span>
+            ${p.allergies&&p.allergies!=='None'?`<span class="tag" style="color:var(--amber)">⚠ ${esc(p.allergies)}</span>`:''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    ${list.length===0?'<div class="empty">No patients found</div>':''}
+  </div>`;
 }
 
+function buildFollowUp(){
+  const done=S.appointments.filter(a=>a.status==='completed');
+  return`
+  <div class="topbar">
+    <div><div class="pg-title">WhatsApp Follow-Ups</div><div class="pg-sub">${S.followUps.length} sent · ${S.followUps.filter(f=>f.resp==='no').length} rebookings</div></div>
+  </div>
+  <div class="content">
+    <div class="fu-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">
+      ${done.map(a=>{
+        const fu=S.followUps.find(f=>f.aid===a.id), wa=S.waMessages[a.id]||[];
+        return`<div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+            <div>
+              <div style="font-weight:600">${esc(a.pname)}</div>
+              <div style="font-size:11px;color:var(--t3);margin-top:2px">${fd(a.date)} · ${esc(a.symptoms)}</div>
+            </div>
+            ${fu?`<span class="badge ${fu.resp==='yes'?'b-green':'b-amber'}">${fu.resp==='yes'?'✓ Well':'⚠ Rebooked'}</span>`
+              :`<button class="btn btn-p btn-sm" onclick="simFollowUp('${a.id}')" ${S.simulating===a.id?'disabled':''}>▶ Simulate</button>`}
+          </div>
+          ${wa.length?`<div class="wa-wrap" id="wa-${a.id}">
+            <div style="font-size:10px;color:var(--t3);text-align:center;margin-bottom:6px">📱 WHATSAPP SIMULATION</div>
+            ${wa.map(m=>`<div class="wa-msg ${m.from==='patient'?'r':''}">
+              <div class="wa-b ${m.from==='clinic'?'wa-cli':'wa-pat'}">${esc(m.text)}<div class="wa-t">${m.from==='clinic'?'🏥 Clinic':'👤 Patient'}</div></div>
+            </div>`).join('')}
+          </div>`:''}
+          ${fu&&wa.length===0?`<div style="font-size:12px;color:var(--t3);background:var(--bg3);border-radius:var(--rs);padding:8px;border:1px solid var(--border)">${esc(fu.note)}</div>`:''}
+          ${a.rx.length?`<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">${a.rx.map(r=>`<span class="tag">💊 ${esc(r.name)}</span>`).join('')}</div>`:''}
+        </div>`;
+      }).join('')}
+      ${done.length===0?'<div class="empty">No completed appointments yet</div>':''}
+    </div>
+  </div>`;
+}
+
+/* ── Modal actions ── */
+function openModal(id){S.modalAppt=S.appointments.find(a=>a.id===id);S.modalRx=[...(S.modalAppt?.rx||[])];S.modalNotes=S.modalAppt?.notes||'';renderPage()}
+function closeModal(){S.modalAppt=null;renderPage()}
+function addRx(){
+  const n=document.getElementById('rx-name')?.value?.trim();
+  if(!n)return;
+  S.modalRx=[...S.modalRx,{name:n,dose:document.getElementById('rx-dose')?.value||'',days:document.getElementById('rx-days')?.value||''}];
+  renderPage();
+}
+function removeRx(i){S.modalRx=S.modalRx.filter((_,idx)=>idx!==i);renderPage()}
+function saveAppt(){
+  const a=S.appointments.find(x=>x.id===S.modalAppt.id);
+  if(a){a.notes=S.modalNotes||document.getElementById('modal-notes')?.value||'';a.rx=S.modalRx;a.status='completed';}
+  closeModal();
+}
+async function aiSuggest(){
+  const btn=event.target;btn.textContent='⟳…';btn.disabled=true;
+  const a=S.modalAppt;
+  await new Promise(r=>setTimeout(r,800));
+  const symLow=(a.symptoms||'').toLowerCase();
+  let notes='',meds=[];
+  if(symLow.includes('fever')||symLow.includes('headache')){notes='Viral infection likely. Monitor hydration.';meds=[{name:'Paracetamol 650mg',dose:'Every 6 hours',days:5},{name:'ORS Sachets',dose:'2-3 daily',days:3}];}
+  else if(symLow.includes('back')||symLow.includes('pain')){notes='Musculoskeletal. Rest & physiotherapy recommended.';meds=[{name:'Ibuprofen 400mg',dose:'Twice daily after meals',days:5}];}
+  else if(symLow.includes('cough')||symLow.includes('cold')){notes='Viral URTI suspected. Symptomatic management.';meds=[{name:'Cetirizine 10mg',dose:'Once at night',days:5}];}
+  else{notes='Clinical assessment required.';meds=[{name:'Paracetamol 500mg',dose:'As needed',days:3}];}
+  S.modalNotes=notes+' [AI-suggested — review]';S.modalRx=meds;
+  renderPage();
+}
+
+/* ── WhatsApp simulation ── */
 async function simFollowUp(aid){
   const a=S.appointments.find(x=>x.id===aid);
-  if(!a||S.simRunning)return;
-  S.simRunning=aid;S.waMessages={...S.waMessages,[aid]:[]};render();
-  const add=(from,text)=>{S.waMessages={...S.waMessages,[aid]:[...(S.waMessages[aid]||[]),{from,text}]};render();};
+  if(!a||S.simulating)return;
+  S.simulating=aid;S.waMessages={...S.waMessages,[aid]:[]};renderPage();
+  const add=(from,text)=>{S.waMessages={...S.waMessages,[aid]:[...(S.waMessages[aid]||[]),{from,text}]};renderPage();const el=document.getElementById('wa-'+aid);if(el)el.scrollTop=el.scrollHeight};
   const delay=ms=>new Promise(r=>setTimeout(r,ms));
-  await delay(600);add('clinic',`Hi ${a.pname.split(' ')[0]}! 👋 Hope you're feeling better after your visit.`);
-  await delay(900);add('clinic',`${a.rx.length?'⏰ Please remember to take:\n'+a.rx.map(r=>`• ${r.name} — ${r.dose}`).join('\n'):'💊 Please take your medicines as advised.'}`);
-  await delay(1000);add('clinic',`Are you feeling better?\nReply YES ✅ or NO ❌`);
+  await delay(700);add('clinic',`Hi ${a.pname.split(' ')[0]}! 👋 Hope you're recovering after your visit on ${fd(a.date)}.`);
+  await delay(900);add('clinic',`⏰ Medicine Reminder:\n${a.rx.map(r=>`• ${r.name} — ${r.dose}`).join('\n')||'Take your medicines as prescribed.'}`);
+  await delay(900);add('clinic',`Feeling better?\n✅ Reply YES — Feeling okay\n❌ Reply NO — Still unwell`);
   await delay(1400);
   const resp=Math.random()>0.4?'yes':'no';
-  add('patient',resp==='yes'?'YES ✅ Much better, thank you!':'NO ❌ Still not feeling well');
-  if(resp==='no'){await delay(700);add('clinic',`Sorry to hear that 😔 Please come back for a check-up.\n📞 Call us: +91 98200 00000`);}
-  S.followUps.push({id:uid(),pid:a.pid,pname:a.pname,aid:a.id,sent:new Date().toISOString(),resp,note:resp==='yes'?'Patient doing well':'Patient needs rebooking'});
-  S.simRunning=null;render();
+  add('patient',resp==='yes'?'YES ✅ Feeling much better!':'NO ❌ Still having discomfort');
+  if(resp==='no'){await delay(800);add('clinic',`Sorry to hear that 😔\n\n🔗 Book follow-up: citycareclinic.com/book\n📞 +91 98200 00000`);}
+  S.followUps=[...S.followUps,{id:uid(),pid:a.pid,pname:a.pname,aid:a.id,sent:new Date().toISOString(),resp,adhere:resp==='yes',note:resp==='yes'?'Patient doing well':'Rebook triggered'}];
+  S.simulating=null;renderPage();
 }
-
-/* ── Update modal ── */
-function openUpdateModal(id){
-  const a=S.appointments.find(x=>x.id===id);
-  S.modalApptId=id;S.modalRx=[...a.rx];S.modalNotes=a.notes||'';
-  renderModal();
-}
-function renderModal(){
-  let existing=document.getElementById('modal-wrap');
-  if(existing)existing.remove();
-  if(!S.modalApptId)return;
-  const a=S.appointments.find(x=>x.id===S.modalApptId);
-  const el=document.createElement('div');
-  el.id='modal-wrap';el.className='modal-wrap';
-  el.innerHTML=`<div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">
-      <span>✏️ Update Visit</span>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div style="background:var(--sky);border-radius:var(--rs);padding:12px 14px;margin-bottom:16px;font-size:13px;font-weight:700;color:var(--sky3)">
-      ${esc(a.pname)} · ${fmtDate(a.date)}
-    </div>
-    <label class="field-label">Doctor's Notes</label>
-    <textarea class="field-input" id="modal-notes" placeholder="Write your notes…">${esc(S.modalNotes)}</textarea>
-    <label class="field-label" style="margin-bottom:10px">Medicines Prescribed</label>
-    ${S.modalRx.map((r,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-      <div class="rx-item" style="flex:1;margin:0">
-        <div class="rx-name">💊 ${esc(r.name)}</div>
-        <div class="rx-detail">${esc(r.dose)} · ${esc(r.days)} days</div>
-      </div>
-      <button onclick="removeModalRx(${i})" style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--rose2);background:var(--rose);color:var(--rose3);font-size:16px;cursor:pointer;font-weight:700;flex-shrink:0">✕</button>
-    </div>`).join('')}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-      <input class="field-input" id="rx-name" placeholder="Medicine name" style="margin-bottom:0"/>
-      <input class="field-input" id="rx-dose" placeholder="Dosage" style="margin-bottom:0"/>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:16px">
-      <input class="field-input" id="rx-days" placeholder="No. of days" type="number" style="margin-bottom:0"/>
-      <button onclick="addModalRx()" style="padding:12px 20px;border-radius:var(--rs);border:none;background:var(--sky3);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif">+ Add</button>
-    </div>
-    <button class="submit-btn" onclick="saveModal()">✅ Save & Mark Complete</button>
-    <button class="cancel-btn" onclick="closeModal()">Cancel</button>
-  </div>`;
-  document.body.appendChild(el);
-}
-function addModalRx(){
-  const n=document.getElementById('rx-name')?.value.trim();
-  if(!n)return;
-  S.modalRx.push({name:n,dose:document.getElementById('rx-dose')?.value||'As directed',days:document.getElementById('rx-days')?.value||'7'});
-  renderModal();
-}
-function removeModalRx(i){S.modalRx=S.modalRx.filter((_,idx)=>idx!==i);renderModal()}
-function saveModal(){
-  const a=S.appointments.find(x=>x.id===S.modalApptId);
-  if(a){a.notes=document.getElementById('modal-notes')?.value||S.modalNotes;a.rx=S.modalRx;a.status='completed';}
-  closeModal();render();
-}
-function closeModal(){S.modalApptId=null;const el=document.getElementById('modal-wrap');if(el)el.remove()}
 
 /* ── Main render ── */
-function render(){
-  const titles={home:'Home',appointments:'Appointments',patients:'Patients',book:'Book Appointment',followup:'Follow-up'};
-  let html='';
-  switch(S.tab){
-    case 'appointments': html=pageAppointments();break;
-    case 'patients': html=pagePatients();break;
-    case 'book': html=pageBook();break;
-    case 'followup': html=pageFollowup();break;
-    default: html=pageHome();
+function renderPage(){
+  const col=S.collapsed;
+  const nav=[{id:'dashboard',i:'📊',l:'Dashboard'},{id:'appointments',i:'📅',l:'Appointments'},{id:'patients',i:'👥',l:'Patients'},{id:'booking',i:'🤖',l:'AI Chat'},{id:'followup',i:'💬',l:'Follow-Ups'}];
+  let pageHtml;
+  switch(S.page){
+    case 'appointments': pageHtml=buildAppointments();break;
+    case 'patients': pageHtml=buildPatients();break;
+    case 'booking': pageHtml=buildChat();break;
+    case 'followup': pageHtml=buildFollowUp();break;
+    default: pageHtml=buildDashboard();
   }
-  document.getElementById('page').innerHTML=html;
-  renderNav();
-  window.scrollTo(0,0);
+  document.getElementById('root').innerHTML=`<div class="shell">
+    <aside class="sidebar ${col?'col':''}">
+      <div class="sb-logo">
+        <div class="logo-box">+</div>
+        ${col?'':'<div class="logo-txt"><span>Medi</span>Flow</div>'}
+      </div>
+      <nav class="sb-nav">
+        ${nav.map(n=>`<button class="nav-btn ${S.page===n.id?'act':''}" onclick="S.page='${n.id}';S.selPat=null;renderPage()">
+          <span class="nav-icon">${n.i}</span>${col?'':'<span>'+n.l+'</span>'}
+        </button>`).join('')}
+      </nav>
+      <div class="sb-foot">
+        <div class="status-pill"><div class="blink"></div>${col?'':'<span style="font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden">City Care Clinic</span>'}</div>
+        <button style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:6px;color:var(--t2);cursor:pointer;font-size:11px;transition:.15s;text-align:center" onclick="S.collapsed=!S.collapsed;renderPage()">${col?'→':'←'}</button>
+      </div>
+    </aside>
+    <div class="main">${pageHtml}</div>
+  </div>
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      ${nav.map(n=>`<button class="bnav-btn ${S.page===n.id?'act':''}" onclick="S.page='${n.id}';S.selPat=null;renderPage()">
+        <div class="bnav-icon-wrap"><div class="bnav-icon">${n.i}</div></div>
+        <div class="bnav-label">${n.l}</div>
+      </button>`).join('')}
+    </div>
+  </nav>`;
+
+  if(S.page==='booking'){setTimeout(()=>{const el=document.getElementById('chat-inp');if(el)el.focus()},50)}
 }
 
-document.getElementById('hdr-date').textContent=new Date('2026-04-03').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
-render();
+renderPage();
 </script>
 </body>
 </html>

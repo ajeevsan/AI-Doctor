@@ -235,8 +235,7 @@ Rules:
 });
 
 app.get('/', (req, res) => {
-  // res.sendFile(path.join(__dirname, 'index.html'));
-  res.sendFile(path.join(__dirname, 'mediflow-simple.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.delete('/api/chat/:sessionId', (req, res) => {
