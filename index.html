@@ -21,8 +21,6 @@
 }
 body{background:var(--offwhite);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden}
 #app{min-height:100vh;display:flex;flex-direction:column}
-
-/* ── Top Header ── */
 .header{background:var(--white);border-bottom:1.5px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-mark{width:40px;height:40px;background:var(--sky3);border-radius:14px;display:grid;place-items:center;font-size:20px}
@@ -30,14 +28,8 @@ body{background:var(--offwhite);color:var(--text);font-family:'Nunito',sans-seri
 .logo-name span{color:var(--sky3)}
 .header-date{font-size:13px;color:var(--t3);font-weight:600;display:none}
 @media(min-width:480px){.header-date{display:block}}
-
-/* ── Page wrapper ── */
 .page{flex:1;padding:20px 16px calc(80px + var(--safe-b));max-width:680px;margin:0 auto;width:100%}
-
-/* ── Section title ── */
 .sec-title{font-size:13px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;padding-left:4px}
-
-/* ── Big stat cards ── */
 .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
 .stat-card{border-radius:var(--r);padding:18px 16px;cursor:pointer;transition:transform .12s;border:1.5px solid transparent;position:relative;overflow:hidden}
 .stat-card:active{transform:scale(.97)}
@@ -52,8 +44,6 @@ body{background:var(--offwhite);color:var(--text);font-family:'Nunito',sans-seri
 .stat-card.peach .stat-num{color:var(--peach3)}
 .stat-card.lav .stat-num{color:var(--lav3)}
 .stat-label{font-size:13px;font-weight:700;color:var(--t2)}
-
-/* ── Big action buttons ── */
 .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
 .action-btn{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:20px 14px;cursor:pointer;text-align:center;transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:10px}
 .action-btn:active{transform:scale(.96);background:var(--light)}
@@ -61,8 +51,6 @@ body{background:var(--offwhite);color:var(--text);font-family:'Nunito',sans-seri
 .action-icon{font-size:36px;line-height:1}
 .action-label{font-size:14px;font-weight:700;color:var(--text);line-height:1.3}
 .action-sub{font-size:11px;color:var(--t3);font-weight:600}
-
-/* ── Patient list ── */
 .patient-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .12s;margin-bottom:10px}
 .patient-card:active{transform:scale(.98)}
 .patient-card:hover{border-color:var(--sky3);background:var(--sky)}
@@ -72,8 +60,6 @@ body{background:var(--offwhite);color:var(--text);font-family:'Nunito',sans-seri
 .patient-meta{font-size:12px;color:var(--t3);font-weight:600}
 .patient-badge{background:var(--light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--t2);flex-shrink:0}
 .patient-badge.allergy{background:var(--peach);color:var(--peach3)}
-
-/* ── Appointment cards ── */
 .appt-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;cursor:pointer;transition:all .12s}
 .appt-card:active{transform:scale(.98)}
 .appt-card.upcoming{border-left:5px solid var(--sky3);border-radius:0 var(--r) var(--r) 0}
@@ -86,23 +72,16 @@ body{background:var(--offwhite);color:var(--text);font-family:'Nunito',sans-seri
 .appt-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);font-weight:600;margin-bottom:4px}
 .appt-row:last-child{margin-bottom:0}
 .appt-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
-
-/* ── Filter tabs ── */
 .filter-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
 .filter-tabs::-webkit-scrollbar{display:none}
 .ftab{padding:8px 18px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);color:var(--t2);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.12s;font-family:'Nunito',sans-serif}
 .ftab.act{background:var(--sky3);border-color:var(--sky3);color:#fff}
-
-/* ── Booking form ── */
 .form-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.form-title{font-size:18px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.form-title-icon{font-size:24px}
 .field-label{font-size:13px;font-weight:700;color:var(--t2);margin-bottom:6px;display:block}
 .field-input{width:100%;background:var(--offwhite);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;color:var(--text);font-size:15px;font-weight:600;outline:none;font-family:'Nunito',sans-serif;transition:border .15s;margin-bottom:14px}
 .field-input:focus{border-color:var(--sky3);background:#fff}
 .field-input::placeholder{color:var(--t3);font-weight:600}
 textarea.field-input{resize:none;min-height:80px;line-height:1.5}
-.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
 .time-chip{padding:10px 6px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:700;color:var(--t2);cursor:pointer;text-align:center;transition:.12s;font-family:'Nunito',sans-serif}
 .time-chip:active{transform:scale(.95)}
 .time-chip.sel{background:var(--sky3);border-color:var(--sky3);color:#fff}
@@ -110,14 +89,10 @@ textarea.field-input{resize:none;min-height:80px;line-height:1.5}
 .submit-btn:active{transform:scale(.98);background:#2d87cc}
 .submit-btn:disabled{opacity:.5;cursor:not-allowed}
 .cancel-btn{width:100%;padding:13px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);color:var(--t2);font-size:15px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:8px}
-
-/* ── Success banner ── */
 .success-banner{background:var(--mint);border:1.5px solid var(--mint2);border-radius:var(--r);padding:18px 16px;display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
 .success-icon{font-size:32px;flex-shrink:0}
 .success-text .bold{font-size:16px;font-weight:800;color:var(--mint3);margin-bottom:4px}
 .success-text .sub{font-size:13px;color:#2d7a50;font-weight:600}
-
-/* ── Detail view ── */
 .detail-header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
 .detail-avatar{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:800;color:#fff;flex-shrink:0}
 .detail-name{font-size:22px;font-weight:800}
@@ -129,13 +104,9 @@ textarea.field-input{resize:none;min-height:80px;line-height:1.5}
 .info-key{font-size:13px;color:var(--t3);font-weight:600}
 .info-val{font-size:14px;font-weight:700;color:var(--text)}
 .back-btn{display:flex;align-items:center;gap:6px;padding:10px 16px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;margin-bottom:20px;width:fit-content}
-
-/* ── Prescription pills ── */
 .rx-item{background:var(--lav);border:1.5px solid var(--lav2);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px}
 .rx-name{font-size:15px;font-weight:800;color:var(--lav3);margin-bottom:3px}
 .rx-detail{font-size:12px;color:#5a4a9e;font-weight:600}
-
-/* ── Follow-up cards ── */
 .fu-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
 .fu-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
 .fu-name{font-size:15px;font-weight:800}
@@ -147,8 +118,6 @@ textarea.field-input{resize:none;min-height:80px;line-height:1.5}
 .sim-btn{width:100%;padding:12px;border-radius:var(--rs);border:1.5px solid var(--sky2);background:var(--sky);color:var(--sky3);font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:10px;transition:.12s}
 .sim-btn:active{transform:scale(.98)}
 .sim-btn:disabled{opacity:.5;cursor:not-allowed}
-
-/* ── WhatsApp bubbles ── */
 .wa-wrap{background:#e8f5e9;border-radius:var(--rs);padding:12px;margin-top:10px}
 .wa-header{font-size:11px;font-weight:700;color:#4caf50;text-align:center;margin-bottom:10px;letter-spacing:.5px}
 .wa-msg{display:flex;margin-bottom:8px}
@@ -157,19 +126,13 @@ textarea.field-input{resize:none;min-height:80px;line-height:1.5}
 .wa-clinic{background:#fff;color:#1a2332;border-radius:4px 12px 12px 12px}
 .wa-patient{background:#dcf8c6;color:#1a2332;border-radius:12px 4px 12px 12px}
 .wa-time{font-size:10px;color:var(--t3);margin-top:3px;font-weight:600}
-
-/* ── Empty state ── */
 .empty{text-align:center;padding:40px 20px;color:var(--t3)}
 .empty-icon{font-size:48px;margin-bottom:12px}
 .empty-text{font-size:15px;font-weight:700}
-
-/* ── Search bar ── */
-.search-bar{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px 12px 40px;color:var(--text);font-size:15px;font-weight:600;outline:none;font-family:'Nunito',sans-serif;margin-bottom:16px;transition:border .15s;position:relative}
-.search-bar:focus{border-color:var(--sky3)}
 .search-wrap{position:relative}
+.search-bar{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px 12px 40px;color:var(--text);font-size:15px;font-weight:600;outline:none;font-family:'Nunito',sans-serif;margin-bottom:16px;transition:border .15s}
+.search-bar:focus{border-color:var(--sky3)}
 .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:17px;pointer-events:none}
-
-/* ── Bottom nav ── */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1.5px solid var(--border);z-index:100;padding-bottom:var(--safe-b)}
 .bnav-inner{display:flex;height:64px}
 .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;padding:8px 4px;transition:all .12s;font-family:'Nunito',sans-serif;position:relative}
@@ -178,23 +141,12 @@ textarea.field-input{resize:none;min-height:80px;line-height:1.5}
 .bnav-icon{font-size:22px;line-height:1;transition:transform .12s}
 .bnav-label{font-size:11px;font-weight:700;color:var(--t3)}
 .bnav-btn.act .bnav-label{color:var(--sky3)}
-
-/* ── Modal overlay ── */
 .modal-wrap{position:fixed;inset:0;background:rgba(20,30,50,.5);display:flex;align-items:flex-end;justify-content:center;z-index:200}
 .modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto}
-@media(min-width:640px){
-  .modal-wrap{align-items:center}
-  .modal-sheet{border-radius:24px;max-height:88vh}
-}
+@media(min-width:640px){.modal-wrap{align-items:center}.modal-sheet{border-radius:24px;max-height:88vh}}
 .modal-handle{width:40px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 16px}
 .modal-title{font-size:20px;font-weight:800;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
 .modal-close{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--light);cursor:pointer;font-size:16px;display:grid;place-items:center;flex-shrink:0}
-
-/* ── Utility ── */
-.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}
-.chip.sky{background:var(--sky);color:var(--sky3);border:1.5px solid var(--sky2)}
-.chip.mint{background:var(--mint);color:var(--mint3);border:1.5px solid var(--mint2)}
-.chip.peach{background:var(--peach);color:var(--peach3);border:1.5px solid var(--peach2)}
 .mb8{margin-bottom:8px}.mb16{margin-bottom:16px}.mb20{margin-bottom:20px}
 </style>
 </head>
@@ -214,6 +166,89 @@ textarea.field-input{resize:none;min-height:80px;line-height:1.5}
 </div>
 
 <script>
+/* ═══════════════════════════════════════════
+   DYNAMIC DATE HELPERS
+   All dates are computed relative to TODAY
+═══════════════════════════════════════════ */
+
+// Returns a clean Date at midnight for today
+function today() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+// Offset today by N days and return YYYY-MM-DD string
+function dateOffset(n) {
+  const d = today();
+  d.setDate(d.getDate() + n);
+  return toISO(d);
+}
+
+// Convert Date to YYYY-MM-DD
+function toISO(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+// Format YYYY-MM-DD for display
+function fmtDate(d) {
+  if (!d) return '—';
+  try {
+    return new Date(d + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch { return d; }
+}
+
+// Friendly relative label: "Today", "Tomorrow", "Yesterday", or formatted date
+function friendlyDate(d) {
+  if (!d) return '—';
+  const diff = Math.round((new Date(d + 'T00:00:00') - today()) / 86400000);
+  if (diff === 0) return 'Today';
+  if (diff === 1) return 'Tomorrow';
+  if (diff === -1) return 'Yesterday';
+  return fmtDate(d);
+}
+
+function fmtTime(t) {
+  if (!t) return '';
+  const [h, m] = t.split(':');
+  const hr = parseInt(h);
+  return `${hr > 12 ? hr - 12 : hr || 12}:${m} ${hr >= 12 ? 'PM' : 'AM'}`;
+}
+
+// Build the next N weekday dates from today for the booking picker
+function getBookingDates() {
+  const result = [];
+  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let d = today();
+  let added = 0;
+  let offset = 0;
+  while (added < 8) {
+    const day = d.getDay();
+    const iso = toISO(d);
+    let label;
+    if (offset === 0) label = 'Today';
+    else if (offset === 1) label = 'Tomorrow';
+    else label = `${weekdays[day]} ${months[d.getMonth()]} ${d.getDate()}`;
+    // Skip Sundays (day=0) except today
+    if (day !== 0 || offset === 0) {
+      result.push({ label, val: iso });
+      added++;
+    }
+    offset++;
+    d = new Date(d);
+    d.setDate(d.getDate() + 1);
+  }
+  return result;
+}
+
+/* ═══════════════════════════════════════════
+   DATA — appointments use dynamic offsets:
+   -5 = 5 days ago, +2 = 2 days from now, etc.
+═══════════════════════════════════════════ */
 const S = {
   tab: 'home',
   patients: [
@@ -224,17 +259,17 @@ const S = {
     {id:'p5',name:'Meera Joshi',phone:'98205 55555',dob:'1965-05-12',blood:'A-',allergies:'Aspirin',gender:'Female'},
   ],
   appointments: [
-    {id:'a1',pid:'p1',pname:'Priya Sharma',date:'2026-04-05',time:'10:00',symptoms:'Fever, persistent headache since 3 days',status:'upcoming',notes:'',rx:[]},
-    {id:'a2',pid:'p2',pname:'Arjun Mehta',date:'2026-04-02',time:'11:30',symptoms:'Lower back pain, difficulty standing',status:'completed',notes:'Muscle strain. Rest for 3 days.',rx:[{name:'Ibuprofen 400mg',dose:'Twice daily after meals',days:5},{name:'Meftal Spas',dose:'Once at night',days:3}]},
-    {id:'a3',pid:'p3',pname:'Sunita Patel',date:'2026-04-01',time:'09:00',symptoms:'Diabetes type-2 follow-up, blurred vision',status:'completed',notes:'HbA1c stable. BP slightly high.',rx:[{name:'Metformin 500mg',dose:'Once daily with dinner',days:30},{name:'Amlodipine 5mg',dose:'Once daily morning',days:30}]},
-    {id:'a4',pid:'p4',pname:'Rahul Desai',date:'2026-04-07',time:'14:00',symptoms:'Persistent cough, mild fever, sore throat',status:'upcoming',notes:'',rx:[]},
-    {id:'a5',pid:'p5',pname:'Meera Joshi',date:'2026-04-03',time:'16:00',symptoms:'Knee pain, swelling in left knee',status:'upcoming',notes:'',rx:[]},
-    {id:'a6',pid:'p1',pname:'Priya Sharma',date:'2026-03-15',time:'10:30',symptoms:'Seasonal allergies, runny nose',status:'completed',notes:'Allergic rhinitis confirmed.',rx:[{name:'Cetirizine 10mg',dose:'Once daily at bedtime',days:10}]},
+    {id:'a1',pid:'p1',pname:'Priya Sharma',  date:dateOffset(0),  time:'10:00',symptoms:'Fever, persistent headache since 3 days',     status:'upcoming', notes:'',rx:[]},
+    {id:'a2',pid:'p2',pname:'Arjun Mehta',   date:dateOffset(-3), time:'11:30',symptoms:'Lower back pain, difficulty standing',          status:'completed',notes:'Muscle strain. Rest for 3 days.',rx:[{name:'Ibuprofen 400mg',dose:'Twice daily after meals',days:5},{name:'Meftal Spas',dose:'Once at night',days:3}]},
+    {id:'a3',pid:'p3',pname:'Sunita Patel',  date:dateOffset(-4), time:'09:00',symptoms:'Diabetes type-2 follow-up, blurred vision',     status:'completed',notes:'HbA1c stable. BP slightly high.',rx:[{name:'Metformin 500mg',dose:'Once daily with dinner',days:30},{name:'Amlodipine 5mg',dose:'Once daily morning',days:30}]},
+    {id:'a4',pid:'p4',pname:'Rahul Desai',   date:dateOffset(2),  time:'14:00',symptoms:'Persistent cough, mild fever, sore throat',     status:'upcoming', notes:'',rx:[]},
+    {id:'a5',pid:'p5',pname:'Meera Joshi',   date:dateOffset(1),  time:'16:00',symptoms:'Knee pain, swelling in left knee',              status:'upcoming', notes:'',rx:[]},
+    {id:'a6',pid:'p1',pname:'Priya Sharma',  date:dateOffset(-21),time:'10:30',symptoms:'Seasonal allergies, runny nose',                status:'completed',notes:'Allergic rhinitis confirmed.',rx:[{name:'Cetirizine 10mg',dose:'Once daily at bedtime',days:10}]},
   ],
   followUps: [
-    {id:'f1',pid:'p2',pname:'Arjun Mehta',aid:'a2',sent:'2026-04-02T18:00:00',resp:'yes',note:'Feeling much better, back pain reduced'},
-    {id:'f2',pid:'p3',pname:'Sunita Patel',aid:'a3',sent:'2026-04-01T18:00:00',resp:'no',note:'Vision still blurry, needs rebooking'},
-    {id:'f3',pid:'p1',pname:'Priya Sharma',aid:'a6',sent:'2026-03-15T19:00:00',resp:'yes',note:'Allergy resolved after 3 days'},
+    {id:'f1',pid:'p2',pname:'Arjun Mehta', aid:'a2',sent:new Date(today().getTime()-3*86400000).toISOString(), resp:'yes',note:'Feeling much better, back pain reduced'},
+    {id:'f2',pid:'p3',pname:'Sunita Patel',aid:'a3',sent:new Date(today().getTime()-4*86400000).toISOString(), resp:'no', note:'Vision still blurry, needs rebooking'},
+    {id:'f3',pid:'p1',pname:'Priya Sharma',aid:'a6',sent:new Date(today().getTime()-21*86400000).toISOString(),resp:'yes',note:'Allergy resolved after 3 days'},
   ],
   apptFilter: 'all',
   patSearch: '',
@@ -250,14 +285,12 @@ const S = {
   modalNotes: '',
 };
 
+/* ── Misc helpers ── */
 const AV_COLORS = ['#3b9ade','#6c5ce7','#e87230','#22a366','#d63864','#c98a00','#0984e3'];
 function avColor(name){let h=0;for(let c of(name||''))h=(h*31+c.charCodeAt(0))%AV_COLORS.length;return AV_COLORS[h]}
 function initials(n){return(n||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?'}
-function fmtDate(d){if(!d)return'—';try{return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}catch{return d}}
-function fmtTime(t){if(!t)return'';const[h,m]=t.split(':');const hr=parseInt(h);return`${hr>12?hr-12:hr||12}:${m} ${hr>=12?'PM':'AM'}`}
 function uid(){return'x'+Date.now()+Math.random().toString(36).slice(2,5)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-
 function setTab(t){S.tab=t;S.selPatId=null;S.selApptId=null;S.bookStep=0;S.bookData={};S.bookSuccess=false;render()}
 
 /* ── Nav ── */
@@ -278,6 +311,8 @@ function pageHome(){
   const completed=S.appointments.filter(a=>a.status==='completed').length;
   const patients=S.patients.length;
   const fuSent=S.followUps.length;
+  const todayStr=toISO(today());
+  const todayAppts=S.appointments.filter(a=>a.status==='upcoming'&&a.date===todayStr);
   const nextAppt=[...S.appointments].filter(a=>a.status==='upcoming').sort((a,b)=>new Date(a.date)-new Date(b.date))[0];
   return`
     <div class="sec-title">Overview</div>
@@ -303,7 +338,22 @@ function pageHome(){
         <div class="stat-label">Follow-ups</div>
       </div>
     </div>
-    ${nextAppt?`
+    ${todayAppts.length?`
+    <div class="sec-title">Today's Appointments (${todayAppts.length})</div>
+    ${todayAppts.map(a=>`
+    <div class="appt-card upcoming mb8" onclick="openApptDetail('${a.id}')">
+      <div class="appt-head">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="avatar" style="width:40px;height:40px;font-size:14px;background:${avColor(a.pname)}">${initials(a.pname)}</div>
+          <div class="appt-name">${esc(a.pname)}</div>
+        </div>
+        <span class="appt-chip upcoming">Today</span>
+      </div>
+      <div class="appt-row"><span class="appt-icon">⏰</span>${fmtTime(a.time)}</div>
+      <div class="appt-row"><span class="appt-icon">🩺</span>${esc(a.symptoms)}</div>
+    </div>`).join('')}
+    `:''}
+    ${nextAppt&&nextAppt.date!==todayStr?`
     <div class="sec-title">Next Appointment</div>
     <div class="appt-card upcoming mb20" onclick="openApptDetail('${nextAppt.id}')">
       <div class="appt-head">
@@ -311,7 +361,7 @@ function pageHome(){
           <div class="avatar" style="width:40px;height:40px;font-size:14px;background:${avColor(nextAppt.pname)}">${initials(nextAppt.pname)}</div>
           <div class="appt-name">${esc(nextAppt.pname)}</div>
         </div>
-        <span class="appt-chip upcoming">Upcoming</span>
+        <span class="appt-chip upcoming">${friendlyDate(nextAppt.date)}</span>
       </div>
       <div class="appt-row"><span class="appt-icon">📅</span>${fmtDate(nextAppt.date)}</div>
       <div class="appt-row"><span class="appt-icon">⏰</span>${fmtTime(nextAppt.time)}</div>
@@ -331,8 +381,8 @@ function pageHome(){
       </button>
       <button class="action-btn" onclick="S.apptFilter='upcoming';setTab('appointments')">
         <div class="action-icon">📋</div>
-        <div class="action-label">Today's Schedule</div>
-        <div class="action-sub">View upcoming</div>
+        <div class="action-label">All Upcoming</div>
+        <div class="action-sub">View schedule</div>
       </button>
       <button class="action-btn" onclick="setTab('followup')">
         <div class="action-icon">💊</div>
@@ -358,7 +408,7 @@ function pageAppointments(){
           <div class="avatar" style="width:40px;height:40px;font-size:14px;background:${avColor(a.pname)}">${initials(a.pname)}</div>
           <div class="appt-name">${esc(a.pname)}</div>
         </div>
-        <span class="appt-chip ${a.status}">${a.status==='completed'?'Done':'Upcoming'}</span>
+        <span class="appt-chip ${a.status}">${a.status==='completed'?'Done':friendlyDate(a.date)}</span>
       </div>
       <div class="appt-row"><span class="appt-icon">📅</span>${fmtDate(a.date)}</div>
       <div class="appt-row"><span class="appt-icon">⏰</span>${fmtTime(a.time)}</div>
@@ -380,14 +430,14 @@ function pageApptDetail(id){
       <div class="detail-avatar" style="background:${avColor(a.pname)}">${initials(a.pname)}</div>
       <div>
         <div class="detail-name">${esc(a.pname)}</div>
-        <div class="detail-sub">${fmtDate(a.date)} · ${fmtTime(a.time)}</div>
+        <div class="detail-sub">${friendlyDate(a.date)} · ${fmtTime(a.time)}</div>
       </div>
     </div>
     <div class="info-block mb16">
       <div class="info-row"><span class="info-key">📅 Date</span><span class="info-val">${fmtDate(a.date)}</span></div>
       <div class="info-row"><span class="info-key">⏰ Time</span><span class="info-val">${fmtTime(a.time)}</span></div>
       <div class="info-row"><span class="info-key">🩺 Symptoms</span><span class="info-val" style="text-align:right;max-width:60%">${esc(a.symptoms)}</span></div>
-      <div class="info-row"><span class="info-key">Status</span><span class="appt-chip ${a.status}">${a.status==='completed'?'Done':'Upcoming'}</span></div>
+      <div class="info-row"><span class="info-key">Status</span><span class="appt-chip ${a.status}">${a.status==='completed'?'Done':friendlyDate(a.date)}</span></div>
     </div>
     ${a.notes?`<div class="info-block mb16"><div style="font-size:13px;font-weight:700;color:var(--t3);margin-bottom:8px">📝 Doctor Notes</div><div style="font-size:14px;font-weight:600;color:var(--t2);line-height:1.6">${esc(a.notes)}</div></div>`:''}
     ${a.rx.length?`
@@ -443,7 +493,7 @@ function pagePatientDetail(pid){
     ${appts.length?`
     <div class="sec-title">Visits</div>
     ${appts.map(a=>`<div class="appt-card ${a.status}" onclick="S.selApptId='${a.id}';S.tab='appointments';S.selPatId=null;render()">
-      <div class="appt-head"><span class="appt-name" style="font-size:14px">${fmtDate(a.date)} · ${fmtTime(a.time)}</span><span class="appt-chip ${a.status}">${a.status==='completed'?'Done':'Soon'}</span></div>
+      <div class="appt-head"><span class="appt-name" style="font-size:14px">${friendlyDate(a.date)} · ${fmtTime(a.time)}</span><span class="appt-chip ${a.status}">${a.status==='completed'?'Done':'Soon'}</span></div>
       <div class="appt-row"><span class="appt-icon">🩺</span>${esc(a.symptoms)}</div>
       ${a.rx.length?`<div class="appt-row"><span class="appt-icon">💊</span>${a.rx.map(r=>esc(r.name)).join(', ')}</div>`:''}
     </div>`).join('')}`:''}
@@ -466,7 +516,7 @@ function pageBook(){
         <div class="success-icon">🎉</div>
         <div class="success-text">
           <div class="bold">Appointment Booked!</div>
-          <div class="sub">${esc(d.pname)} · ${fmtDate(d.date)} at ${fmtTime(d.time)}</div>
+          <div class="sub">${esc(d.pname)} · ${friendlyDate(d.date)} at ${fmtTime(d.time)}</div>
         </div>
       </div>
       <div class="info-block mb16">
@@ -479,6 +529,7 @@ function pageBook(){
       <button class="submit-btn" onclick="S.bookSuccess=false;S.bookData={};S.bookStep=0;render()">📝 Book Another</button>
       <button class="cancel-btn" onclick="S.tab='appointments';render()">📅 View All Appointments</button>`;
   }
+
   const step=S.bookStep, d=S.bookData;
   const STEPS=['Patient Info','Choose Date','Choose Time','Symptoms','Confirm'];
   const stepBar=`<div style="display:flex;gap:6px;margin-bottom:20px;align-items:center">
@@ -488,16 +539,15 @@ function pageBook(){
   <div style="font-size:20px;font-weight:800;margin-bottom:20px">${['Who is this for?','Pick a date','Pick a time','What\'s the reason?','Confirm details'][step]}</div>`;
 
   if(step===0){
-    const existing=S.patients;
     return stepBar+`
       <div class="form-card">
         <label class="field-label">Patient Name</label>
         <input class="field-input" id="b-name" placeholder="Full name…" value="${esc(d.name||'')}"/>
         <label class="field-label">Phone Number</label>
         <input class="field-input" id="b-phone" placeholder="Mobile number…" value="${esc(d.phone||'')}"/>
-        ${existing.length?`<div style="font-size:13px;font-weight:700;color:var(--t3);margin-bottom:8px">Or pick an existing patient:</div>
+        ${S.patients.length?`<div style="font-size:13px;font-weight:700;color:var(--t3);margin-bottom:8px">Or pick an existing patient:</div>
         <div style="display:flex;flex-direction:column;gap:6px">
-        ${existing.map(p=>`<button style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-family:'Nunito',sans-serif;text-align:left;transition:.12s" onclick="pickPatient('${p.id}')">
+        ${S.patients.map(p=>`<button style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-family:'Nunito',sans-serif;text-align:left;transition:.12s" onclick="pickPatient('${p.id}')">
           <div style="width:36px;height:36px;border-radius:50%;background:${avColor(p.name)};display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0">${initials(p.name)}</div>
           <div><div style="font-size:14px;font-weight:700">${esc(p.name)}</div><div style="font-size:11px;color:var(--t3);font-weight:600">${esc(p.phone)}</div></div>
         </button>`).join('')}
@@ -505,13 +555,10 @@ function pageBook(){
         <button class="submit-btn" style="margin-top:16px" onclick="step0Next()">Next →</button>
       </div>`;
   }
+
   if(step===1){
-    const dates=[
-      {label:'Today',val:'2026-04-03'},{label:'Tomorrow',val:'2026-04-04'},
-      {label:'Mon Apr 6',val:'2026-04-06'},{label:'Tue Apr 7',val:'2026-04-07'},
-      {label:'Wed Apr 8',val:'2026-04-08'},{label:'Thu Apr 9',val:'2026-04-09'},
-      {label:'Fri Apr 10',val:'2026-04-10'},{label:'Sat Apr 11',val:'2026-04-11'},
-    ];
+    // Dates are fully dynamic — generated from today
+    const dates = getBookingDates();
     return stepBar+`
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
         ${dates.map(dt=>`<button style="padding:14px 10px;border-radius:var(--rs);border:1.5px solid ${d.date===dt.val?'var(--sky3)':'var(--border)'};background:${d.date===dt.val?'var(--sky)':'var(--white)'};color:${d.date===dt.val?'var(--sky3)':'var(--t2)'};font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.12s" onclick="S.bookData.date='${dt.val}';render()">${dt.label}</button>`).join('')}
@@ -519,15 +566,17 @@ function pageBook(){
       <button class="submit-btn" onclick="step1Next()" ${!d.date?'disabled':''}>Next →</button>
       <button class="cancel-btn" onclick="S.bookStep=0;render()">← Back</button>`;
   }
+
   if(step===2){
     const times=[{l:'9:00 AM',v:'09:00'},{l:'10:00 AM',v:'10:00'},{l:'11:00 AM',v:'11:00'},{l:'12:00 PM',v:'12:00'},{l:'2:00 PM',v:'14:00'},{l:'3:00 PM',v:'15:00'},{l:'4:00 PM',v:'16:00'},{l:'5:00 PM',v:'17:00'}];
     return stepBar+`
-      <div class="time-grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
         ${times.map(t=>`<button class="time-chip ${d.time===t.v?'sel':''}" onclick="S.bookData.time='${t.v}';render()">${t.l}</button>`).join('')}
       </div>
       <button class="submit-btn" onclick="step2Next()" ${!d.time?'disabled':''}>Next →</button>
       <button class="cancel-btn" onclick="S.bookStep=1;render()">← Back</button>`;
   }
+
   if(step===3){
     const reasons=['Fever / Cold','Back pain','Diabetes check','Eye problem','Knee / Joint pain','Cough','Routine check-up','Other'];
     return stepBar+`
@@ -541,12 +590,13 @@ function pageBook(){
       <button class="submit-btn" onclick="step3Next()" ${!d.symptoms?'disabled':''}>Next →</button>
       <button class="cancel-btn" onclick="S.bookStep=2;render()">← Back</button>`;
   }
+
   if(step===4){
     return stepBar+`
       <div class="info-block mb16">
         <div class="info-row"><span class="info-key">👤 Patient</span><span class="info-val">${esc(d.pname||d.name)}</span></div>
         <div class="info-row"><span class="info-key">📱 Phone</span><span class="info-val">${esc(d.phone)}</span></div>
-        <div class="info-row"><span class="info-key">📅 Date</span><span class="info-val">${fmtDate(d.date)}</span></div>
+        <div class="info-row"><span class="info-key">📅 Date</span><span class="info-val">${friendlyDate(d.date)}, ${fmtDate(d.date)}</span></div>
         <div class="info-row"><span class="info-key">⏰ Time</span><span class="info-val">${fmtTime(d.time)}</span></div>
         <div class="info-row"><span class="info-key">🩺 Reason</span><span class="info-val" style="text-align:right;max-width:60%">${esc(d.symptoms)}</span></div>
       </div>
@@ -611,7 +661,7 @@ function pageFollowup(){
         <div class="fu-top">
           <div>
             <div class="fu-name">${esc(a.pname)}</div>
-            <div class="fu-date">Visited ${fmtDate(a.date)}</div>
+            <div class="fu-date">Visited ${friendlyDate(a.date)}</div>
           </div>
           ${fu?`<span class="fu-status ${fu.resp==='yes'?'ok':'warn'}">${fu.resp==='yes'?'✅ Doing well':'⚠️ Rebook'}</span>`
             :`<button class="sim-btn" style="width:auto;padding:7px 14px;margin:0" onclick="simFollowUp('${a.id}')" ${S.simRunning===a.id?'disabled':''}>
@@ -637,7 +687,7 @@ async function simFollowUp(aid){
   const a=S.appointments.find(x=>x.id===aid);
   if(!a||S.simRunning)return;
   S.simRunning=aid;S.waMessages={...S.waMessages,[aid]:[]};render();
-  const add=(from,text)=>{S.waMessages={...S.waMessages,[aid]:[...(S.waMessages[aid]||[]),{from,text}]};render();};
+  const add=(from,text)=>{S.waMessages={...S.waMessages,[aid]:[...(S.waMessages[aid]||[]),{from,text}]};render()};
   const delay=ms=>new Promise(r=>setTimeout(r,ms));
   await delay(600);add('clinic',`Hi ${a.pname.split(' ')[0]}! 👋 Hope you're feeling better after your visit.`);
   await delay(900);add('clinic',`${a.rx.length?'⏰ Please remember to take:\n'+a.rx.map(r=>`• ${r.name} — ${r.dose}`).join('\n'):'💊 Please take your medicines as advised.'}`);
@@ -650,7 +700,6 @@ async function simFollowUp(aid){
   S.simRunning=null;render();
 }
 
-/* ── Update modal ── */
 function openUpdateModal(id){
   const a=S.appointments.find(x=>x.id===id);
   S.modalApptId=id;S.modalRx=[...a.rx];S.modalNotes=a.notes||'';
@@ -670,7 +719,7 @@ function renderModal(){
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div style="background:var(--sky);border-radius:var(--rs);padding:12px 14px;margin-bottom:16px;font-size:13px;font-weight:700;color:var(--sky3)">
-      ${esc(a.pname)} · ${fmtDate(a.date)}
+      ${esc(a.pname)} · ${friendlyDate(a.date)}
     </div>
     <label class="field-label">Doctor's Notes</label>
     <textarea class="field-input" id="modal-notes" placeholder="Write your notes…">${esc(S.modalNotes)}</textarea>
@@ -709,9 +758,7 @@ function saveModal(){
 }
 function closeModal(){S.modalApptId=null;const el=document.getElementById('modal-wrap');if(el)el.remove()}
 
-/* ── Main render ── */
 function render(){
-  const titles={home:'Home',appointments:'Appointments',patients:'Patients',book:'Book Appointment',followup:'Follow-up'};
   let html='';
   switch(S.tab){
     case 'appointments': html=pageAppointments();break;
@@ -725,7 +772,11 @@ function render(){
   window.scrollTo(0,0);
 }
 
-document.getElementById('hdr-date').textContent=new Date('2026-04-03').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+// Set header date to real today
+document.getElementById('hdr-date').textContent = new Date().toLocaleDateString('en-IN', {
+  weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+});
+
 render();
 </script>
 </body>
